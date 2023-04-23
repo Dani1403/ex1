@@ -159,7 +159,7 @@ IsraeliQueue IsraeliQueueClone(IsraeliQueue queue) {
     //TODO : Implement
 }
 
-IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue) {
+IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item) {
     //TODO : Implement
 }
 
