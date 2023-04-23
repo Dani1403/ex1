@@ -154,3 +154,15 @@ void* IsraeliQueueDequeue(IsraeliQueue queue) {
         return item;
     }
 }
+
+IsraeliQueue IsraeliQueueClone(IsraeliQueue queue) {
+    //TODO : Implement
+}
+
+IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue) {
+    //TODO : Implement
+}
+
+IsraeliQueue IsraeliQueueMerge(IsraeliQueue* queuePtr, ComparisonFunction comparison_function) {
+    //TODO : Implement
+}
