@@ -39,8 +39,10 @@ IsraeliQueue IsraeliQueueCreate(FriendshipFunction* friendship_functions, Compar
     new_queue->friendship_functions = friendship_functions;
     new_queue->comparison_function = comparison_function;
     new_queue->head = NULL;
+
     return new_queue;
 }
+
 
 void IsraeliQueueDestroy(IsraeliQueue queue)
 {
@@ -146,17 +148,28 @@ void* IsraeliQueueDequeue(IsraeliQueue queue) {
     {
         return NULL;
     }
-    if (current->next == NULL)
+    while (current->next != NULL)
     {
-        void* item = current->item;
-        free(current);
-        queue->head = NULL;
-        return item;
-    }
+		current = current->next;
+	}
+    void* item = current->item;
+	free(current);
+	return item;
 }
 
 IsraeliQueue IsraeliQueueClone(IsraeliQueue queue) {
-    //TODO : Implement
+    IsraeliQueue new_queue = IsraeliQueueCreate(queue->friendship_functions, queue->comparison_function, queue->friendship_threshold, queue->rivalry_threshold);
+    if (new_queue == NULL)
+    {
+		return NULL;
+	}
+    Node current = queue->head;
+    while (current != NULL)
+    {
+		IsraeliQueueEnqueue(new_queue, current->item);
+		current = current->next;
+	}
+	return new_queue;
 }
 
 IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item) {
@@ -165,4 +178,4 @@ IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item) {
 
 IsraeliQueue IsraeliQueueMerge(IsraeliQueue* queuePtr, ComparisonFunction comparison_function) {
     //TODO : Implement
-}
+} 
