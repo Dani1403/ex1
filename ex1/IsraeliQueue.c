@@ -158,18 +158,23 @@ void* IsraeliQueueDequeue(IsraeliQueue queue) {
 }
 
 IsraeliQueue IsraeliQueueClone(IsraeliQueue queue) {
-    IsraeliQueue new_queue = IsraeliQueueCreate(queue->friendship_functions, queue->comparison_function, queue->friendship_threshold, queue->rivalry_threshold);
+    if (q == NULL)
+    {
+        return NULL;
+    }
+    IsraeliQueue new_queue = IsraeliQueueCreate(q->friendship_functions, q->comparison_function, q->friendship_threshold, q->rivalry_threshold);
     if (new_queue == NULL)
     {
-		return NULL;
-	}
-    Node current = queue->head;
+        return NULL;
+    }
+    Node current = q->head;
     while (current != NULL)
     {
-		IsraeliQueueEnqueue(new_queue, current->item);
-		current = current->next;
-	}
-	return new_queue;
+        void* item_copy = current->item;
+        IsraeliQueueEnqueue(new_queue, item_copy);
+        current = current->next;
+    }
+    return new_queue;
 }
 
 IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item) {
