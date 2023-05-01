@@ -1,7 +1,7 @@
 #include "../ex1/ex1/IsraeliQueue.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
+#include <assert.h> 
 
 int main()
 {
@@ -199,3 +199,7 @@ IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item) {
 IsraeliQueue IsraeliQueueMerge(IsraeliQueue* queuePtr, ComparisonFunction comparisonFunction) {
     //TODO : Implement
 } 
+ 
+IsraeliQueueError IsraeliQueueImprovePosition(IsraeliQueue queue) {
+    //TOO : Implement
+}
