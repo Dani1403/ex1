@@ -15,7 +15,8 @@ typedef struct node_t
     int friend_count;
     int rival_count;
     struct node* next;
-}*Node;
+}
+*Node;
 
 struct IsraeliQueue_t
 {
@@ -25,7 +26,6 @@ struct IsraeliQueue_t
     ComparisonFunction comparison_function;
     Node head;
 };
-
 
 IsraeliQueue IsraeliQueueCreate(FriendshipFunction* friendship_functions, ComparisonFunction comparison_function, int friendship_threshold, int rivalry_threshold)
 {
@@ -42,7 +42,6 @@ IsraeliQueue IsraeliQueueCreate(FriendshipFunction* friendship_functions, Compar
 
     return new_queue;
 }
-
 
 void IsraeliQueueDestroy(IsraeliQueue queue)
 {
@@ -177,10 +176,76 @@ IsraeliQueue IsraeliQueueClone(IsraeliQueue queue) {
     return new_queue;
 }
 
+
+double max(double a, double b)
+{
+    if (a > b)
+    {
+        return a;
+    }
+    else
+    {
+        return b;
+    }
+}
+
+bool IsraeliQueueIsEmpty(IsraeliQueue queue)
+{
+    if (queue == NULL || queue->head == NULL)
+    {
+        return true;
+    }
+    return false;
+}
+
+IsraeliQueue IsraeliQueueMerge(IsraeliQueue *qarr, ComparisonFunction compare_function) {
+    // Vérification des paramètres d'entrée
+    if (qarr == NULL || compare_function == NULL) {
+        return NULL;
+    }
+
+    // Initialisation des paramètres de la nouvelle liste
+    int friendship_threshold_sum = 0;
+    int rivalry_threshold_sum = 0;
+    int num_queues = 0;
+
+    // Parcours des queues pour calculer les paramètres
+    IsraeliQueue current_queue = qarr[0];
+    while (current_queue != NULL) {
+        friendship_threshold_sum += current_queue->friendship_threshold;
+        rivalry_threshold_sum += current_queue->rivalry_threshold;
+        num_queues++;
+
+        current_queue = qarr[num_queues];
+    }
+
+    // Création de la nouvelle file d'attente
+    IsraeliQueue new_queue = IsraeliQueueCreate(NULL, compare_function, friendship_threshold_sum / num_queues, rivalry_threshold_sum / num_queues);
+    if (new_queue == NULL) {
+        return NULL;
+    }
+
+    // Parcours des queues pour ajouter les items au nouveau queue
+    for (int i = 0; i < num_queues; i++) {
+        current_queue = qarr[i];
+        Node current_node = current_queue->head;
+
+        while (current_node != NULL) {
+            IsraeliQueueError err = IsraeliQueueEnqueue(new_queue, current_node->item);
+            if (err != ISRAELIQUEUE_SUCCESS) {
+                // En cas d'erreur lors de l'ajout d'un item, on détruit le nouveau queue et on retourne NULL
+                IsraeliQueueDestroy(new_queue);
+                return NULL;
+            }
+
+            current_node = current_node->next;
+        }
+    }
+
+    return new_queue;
+}
+
+
 IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item) {
     //TODO : Implement
 }
-
-IsraeliQueue IsraeliQueueMerge(IsraeliQueue* queuePtr, ComparisonFunction comparison_function) {
-    //TODO : Implement
-} 
