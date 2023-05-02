@@ -150,56 +150,90 @@ void* IsraeliQueueDequeue(IsraeliQueue queue) {
     }
     while (current->next != NULL)
     {
-		current = current->next;
-	}
+        current = current->next;
+    }
     void* item = current->item;
-	free(current);
-	return item;
+    free(current);
+    return item;
 }
 
 IsraeliQueue IsraeliQueueClone(IsraeliQueue queue) {
     IsraeliQueue new_queue = IsraeliQueueCreate(queue->friendshipFunctions, queue->comparisonFunction, queue->friendshipThreshold, queue->rivalryThreshold);
     if (new_queue == NULL)
     {
-		return NULL;
-	}
+        return NULL;
+    }
     Node current = queue->head;
     while (current != NULL)
     {
-		IsraeliQueueEnqueue(new_queue, current->item);
-		current = current->next;
-	}
-	return new_queue;
+        IsraeliQueueEnqueue(new_queue, current->item);
+        current = current->next;
+    }
+    return new_queue;
 }
 
 IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item) {
-    if(queue == NULL || item == NULL) 
-    { 
-        return ISRAELIQUEUE_BAD_PARAM; 
+    if (queue == NULL || item == NULL)
+    {
+        return ISRAELIQUEUE_BAD_PARAM;
     }
     Node new_node = malloc(sizeof(*new_node));
     if (new_node == NULL)
     {
-		return ISRAELIQUEUE_ALLOC_FAILED;
-	}
+        return ISRAELIQUEUE_ALLOC_FAILED;
+    }
     new_node->item = item;
-	new_node->friend_count = 0;
-	new_node->rival_count = 0;
-	new_node->next = NULL;
-	Node current = queue->head;
+    new_node->friend_count = 0;
+    new_node->rival_count = 0;
+    new_node->next = NULL;
+    Node current = queue->head;
     if (current == NULL)
     {
-		queue->head = new_node;
-		return ISRAELIQUEUE_SUCCESS;
-	}
-
-    //Use the Friendship Functions to know where to insert the new node
+        queue->head = new_node;
+        return ISRAELIQUEUE_SUCCESS;
+    }
+    int position = 1, maxPosition = 1;
+    while (current != NULL) {
+        current = current->next;
+        if (isEnemy(queue->friendshipFunctions, queue->rivalryThreshold, current->item, item) && current->friend_count < RIVAL_QUOTA) {
+            break;
+        }
+        if (isFriend(queue->friendshipFunctions, queue->friendshipThreshold, current->item, item) && current->friend_count < FRIEND_QUOTA) {
+            maxPosition = position;
+        }
+    }
 }
 
 IsraeliQueue IsraeliQueueMerge(IsraeliQueue* queuePtr, ComparisonFunction comparisonFunction) {
     //TODO : Implement
-} 
- 
+}
+
 IsraeliQueueError IsraeliQueueImprovePosition(IsraeliQueue queue) {
     //TOO : Implement
+}
+
+bool isFriend(FriendshipFunction* friendshipFunctions, int friendshipThreshold, void* item1, void* item2) {
+    int i = 0;
+    while (friendshipFunctions[i]) {
+        if (friendshipFunctions[i](item1, item2) > friendshipThreshold) {
+            return true;
+        }
+        i++;
+    }
+    return false;
+}
+
+bool isEnemy(FriendshipFunction* friendshipFunctions, int rivalryThreshold, int friendshipThreshold, void* item1, void* item2) {
+    int i = 0, sum = 0;
+    while (friendshipFunctions[i]) {
+        sum += friendshipFunctions[i](item1, item2);
+        if (friendshipFunctions[i](item1, item2) > friendshipThreshold) {
+			return false;
+		}
+        i++;
+    }
+    if ((sum / i) < rivalryThreshold) {
+		return true;
+	}
+    return false;
 }
