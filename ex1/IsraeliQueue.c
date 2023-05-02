@@ -83,21 +83,21 @@ IsraeliQueueError IsraeliQueueAddFriendshipMeasure(IsraeliQueue queue, Friendshi
     {
         return ISRAELIQUEUE_BAD_PARAM;
     }
-    FriendshipFunction* new_friendshipFunctions = malloc(sizeof(*new_friendshipFunctions) * (IsraeliQueueSize(queue) + 1));
-    if (new_friendshipFunctions == NULL)
+    FriendshipFunction* newFriendshipFunctions = malloc(sizeof(*newFriendshipFunctions) * (IsraeliQueueSize(queue) + 1));
+    if (newFriendshipFunctions == NULL)
     {
         return ISRAELIQUEUE_ALLOC_FAILED;
     }
     int i = 0;
     while (queue->friendshipFunctions[i] != NULL)
     {
-        new_friendshipFunctions[i] = queue->friendshipFunctions[i];
+        newFriendshipFunctions[i] = queue->friendshipFunctions[i];
         i++;
     }
-    new_friendshipFunctions[i] = friendshipFunction;
-    new_friendshipFunctions[i + 1] = NULL;
+    newFriendshipFunctions[i] = friendshipFunction;
+    newFriendshipFunctions[i + 1] = NULL;
     free(queue->friendshipFunctions);
-    queue->friendshipFunctions = new_friendshipFunctions;
+    queue->friendshipFunctions = newFriendshipFunctions;
     return ISRAELIQUEUE_SUCCESS;
 }
 
@@ -184,7 +184,7 @@ IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item) {
         return ISRAELIQUEUE_ALLOC_FAILED;
     }
     new_node->item = item;
-    new_node->friend_count = 0;
+    new_node->friendCount = 0;
     new_node->rivalCount = 0;
     new_node->next = NULL;
     Node current = queue->head;
@@ -199,7 +199,7 @@ IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item) {
         if (isEnemy(queue->friendshipFunctions, queue->rivalryThreshold, queue->friendshipThreshold, current->item, item) && (current->rivalCount < RIVAL_QUOTA)) {
             break;
         }
-        if (isFriend(queue->friendshipFunctions, queue->friendshipThreshold, current->item, item) && current->friend_count < FRIEND_QUOTA) {
+        if (isFriend(queue->friendshipFunctions, queue->friendshipThreshold, current->item, item) && current->friendCount < FRIEND_QUOTA) {
             maxPosition = position;
         }
     }
