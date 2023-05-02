@@ -176,28 +176,6 @@ IsraeliQueue IsraeliQueueClone(IsraeliQueue queue) {
     return new_queue;
 }
 
-
-double max(double a, double b)
-{
-    if (a > b)
-    {
-        return a;
-    }
-    else
-    {
-        return b;
-    }
-}
-
-bool IsraeliQueueIsEmpty(IsraeliQueue queue)
-{
-    if (queue == NULL || queue->head == NULL)
-    {
-        return true;
-    }
-    return false;
-}
-
 IsraeliQueue IsraeliQueueMerge(IsraeliQueue *qarr, ComparisonFunction compare_function) {
     // Vérification des paramètres d'entrée
     if (qarr == NULL || compare_function == NULL) {
