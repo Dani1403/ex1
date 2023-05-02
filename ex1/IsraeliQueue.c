@@ -12,8 +12,8 @@ int main()
 typedef struct node_t
 {
     void* item;
-    int friend_count;
-    int rival_count;
+    int friendCount;
+    int rivalCount;
     struct node* next;
 }*Node;
 
@@ -184,7 +184,7 @@ IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item) {
     }
     new_node->item = item;
     new_node->friend_count = 0;
-    new_node->rival_count = 0;
+    new_node->rivalCount = 0;
     new_node->next = NULL;
     Node current = queue->head;
     if (current == NULL)
@@ -195,7 +195,7 @@ IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item) {
     int position = 1, maxPosition = 1;
     while (current != NULL) {
         current = current->next;
-        if (isEnemy(queue->friendshipFunctions, queue->rivalryThreshold, queue->friendshipThreshold, current->item, item) && (current->rival_count < RIVAL_QUOTA)) {
+        if (isEnemy(queue->friendshipFunctions, queue->rivalryThreshold, queue->friendshipThreshold, current->item, item) && (current->rivalCount < RIVAL_QUOTA)) {
             break;
         }
         if (isFriend(queue->friendshipFunctions, queue->friendshipThreshold, current->item, item) && current->friend_count < FRIEND_QUOTA) {
