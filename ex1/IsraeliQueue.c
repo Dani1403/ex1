@@ -78,6 +78,7 @@ int IsraeliQueueSize(IsraeliQueue queue)
 
 IsraeliQueueError IsraeliQueueAddFriendshipMeasure(IsraeliQueue queue, FriendshipFunction friendshipFunction)
 {
+    //TODO : change everything
     if (queue == NULL || friendshipFunction == NULL)
     {
         return ISRAELIQUEUE_BAD_PARAM;
