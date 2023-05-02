@@ -246,18 +246,8 @@ IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item) {
         queue->head = new_node;
         return ISRAELIQUEUE_SUCCESS;
     }
-    int position = 1, maxPosition = 1;
-    while (current != NULL) {
-        current = current->next;
-        if (isEnemy(queue->friendshipFunctions, queue->rivalryThreshold, queue->friendshipThreshold, current->item, item) && (current->rivalCount < RIVAL_QUOTA)) {
-            current->rivalCount++;
-            break;
-        }
-        if (isFriend(queue->friendshipFunctions, queue->friendshipThreshold, current->item, item) && current->friendCount < FRIEND_QUOTA) {
-            maxPosition = position;
-        }
-    }
-    insertNode(queue->head, new_node, maxPosition);
+    int maxPosition = findMaxPosition(queue, item);
+    insertNode(queue, new_node, maxPosition);
 }
 
 IsraeliQueueError IsraeliQueueImprovePosition(IsraeliQueue queue) {
@@ -265,7 +255,9 @@ IsraeliQueueError IsraeliQueueImprovePosition(IsraeliQueue queue) {
         return ISRAELIQUEUE_BAD_PARAM;
     }
     Node current = queue->head;
+    while (current != NULL) {
 
+    }
 }
 
 bool isFriend(FriendshipFunction* friendshipFunctions, int friendshipThreshold, void* item1, void* item2) {
@@ -309,4 +301,19 @@ void insertNode(Node* head, Node node, int position) {
 	node->next = current->next;
 	current->next = node;
     current->friendCount++;
+}
+
+int findMaxPosition(IsraeliQueue queue, void* item) {
+    Node current = queue->head;
+    int position = 1, maxPosition = 1;
+    while (current != NULL) {
+        current = current->next;
+        if (isEnemy(queue->friendshipFunctions, queue->rivalryThreshold, queue->friendshipThreshold, current->item, item) && (current->rivalCount < RIVAL_QUOTA)) {
+            current->rivalCount++;
+            break;
+        }
+        if (isFriend(queue->friendshipFunctions, queue->friendshipThreshold, current->item, item) && current->friendCount < FRIEND_QUOTA) {
+            maxPosition = position;
+        }
+    }
 }
