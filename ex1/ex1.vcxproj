@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ex1\IsraeliQueue.h" />
+    <ClInclude Include="HackEnrollment.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ex1\EX1.pdf" />
@@ -33,6 +34,7 @@
     <Text Include="ex1\ExampleTest\students.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="HackEnrollment.c" />
     <ClCompile Include="IsraeliQueue.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

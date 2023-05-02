@@ -18,6 +18,9 @@
     <ClInclude Include="ex1\IsraeliQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HackEnrollment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ex1\finalCheck.sh" />
@@ -32,6 +35,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IsraeliQueue.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HackEnrollment.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
