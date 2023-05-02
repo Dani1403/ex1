@@ -256,6 +256,7 @@ IsraeliQueueError IsraeliQueueImprovePosition(IsraeliQueue queue) {
     }
     Node current = queue->head;
     while (current != NULL) {
+        int maxPosition = findMaxPosition(queue, current->item);
 
     }
 }
@@ -301,6 +302,24 @@ void insertNode(Node* head, Node node, int position) {
 	node->next = current->next;
 	current->next = node;
     current->friendCount++;
+}
+
+void removeNode(Node* head, int position) {
+    if (position == 1) {
+		Node temp = *head;
+		*head = (*head)->next;
+		free(temp);
+		return;
+	}
+	Node current = *head;
+	int i = 1;
+    while (i < position - 1) {
+		current = current->next;
+		i++;
+	}
+	Node temp = current->next;
+	current->next = temp->next;
+	free(temp);
 }
 
 int findMaxPosition(IsraeliQueue queue, void* item) {
