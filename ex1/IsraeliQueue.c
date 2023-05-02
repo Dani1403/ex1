@@ -78,25 +78,26 @@ int IsraeliQueueSize(IsraeliQueue queue)
 
 IsraeliQueueError IsraeliQueueAddFriendshipMeasure(IsraeliQueue queue, FriendshipFunction friendshipFunction)
 {
-    //TODO : change everything
     if (queue == NULL || friendshipFunction == NULL)
     {
         return ISRAELIQUEUE_BAD_PARAM;
     }
-    FriendshipFunction* newFriendshipFunctions = malloc(sizeof(*newFriendshipFunctions) * (IsraeliQueueSize(queue) + 1));
-    if (newFriendshipFunctions == NULL)
-    {
-        return ISRAELIQUEUE_ALLOC_FAILED;
-    }
+    FriendshipFunction* friendshipFunctions = queue->friendshipFunctions;
     int i = 0;
-    while (queue->friendshipFunctions[i] != NULL)
-    {
-        newFriendshipFunctions[i] = queue->friendshipFunctions[i];
+    while (friendshipFunctions[i]) {
         i++;
     }
-    newFriendshipFunctions[i] = friendshipFunction;
-    newFriendshipFunctions[i + 1] = NULL;
-    free(queue->friendshipFunctions);
+    FriendshipFunction* newFriendshipFunctions = malloc((i + 2) * sizeof(*newFriendshipFunctions));
+    if (!newFriendshipFunctions)
+    {
+		return ISRAELIQUEUE_ALLOC_FAILED;
+	}
+    i = 0;
+    while (friendshipFunctions[i]) {
+        newFriendshipFunctions[i] = friendshipFunctions[i];
+    }
+    newFriendshipFunctions[i + 1] = friendshipFunction;
+    newFriendshipFunctions[i + 2] = NULL;
     queue->friendshipFunctions = newFriendshipFunctions;
     return ISRAELIQUEUE_SUCCESS;
 }
