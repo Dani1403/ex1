@@ -195,13 +195,14 @@ IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item) {
     int position = 1, maxPosition = 1;
     while (current != NULL) {
         current = current->next;
-        if (isEnemy(queue->friendshipFunctions, queue->rivalryThreshold, current->item, item) && current->friend_count < RIVAL_QUOTA) {
+        if (isEnemy(queue->friendshipFunctions, queue->rivalryThreshold, queue->friendshipThreshold, current->item, item) && (current->rival_count < RIVAL_QUOTA)) {
             break;
         }
         if (isFriend(queue->friendshipFunctions, queue->friendshipThreshold, current->item, item) && current->friend_count < FRIEND_QUOTA) {
             maxPosition = position;
         }
     }
+    insertNode(queue->head, new_node, maxPosition);
 }
 
 IsraeliQueue IsraeliQueueMerge(IsraeliQueue* queuePtr, ComparisonFunction comparisonFunction) {
@@ -236,4 +237,20 @@ bool isEnemy(FriendshipFunction* friendshipFunctions, int rivalryThreshold, int 
 		return true;
 	}
     return false;
+}
+
+void insertNode(Node* head, Node node, int position) {
+    if (position == 1) {
+		node->next = *head;
+		*head = node;
+		return;
+	}
+	Node current = *head;
+	int i = 1;
+    while (i < position - 1) {
+		current = current->next;
+		i++;
+	}
+	node->next = current->next;
+	current->next = node;
 }
