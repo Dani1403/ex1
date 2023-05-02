@@ -250,6 +250,7 @@ IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item) {
     while (current != NULL) {
         current = current->next;
         if (isEnemy(queue->friendshipFunctions, queue->rivalryThreshold, queue->friendshipThreshold, current->item, item) && (current->rivalCount < RIVAL_QUOTA)) {
+            current->rivalCount++;
             break;
         }
         if (isFriend(queue->friendshipFunctions, queue->friendshipThreshold, current->item, item) && current->friendCount < FRIEND_QUOTA) {
@@ -260,7 +261,11 @@ IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item) {
 }
 
 IsraeliQueueError IsraeliQueueImprovePosition(IsraeliQueue queue) {
-    //TOO : Implement
+    if (queue == NULL) {
+        return ISRAELIQUEUE_BAD_PARAM;
+    }
+    Node current = queue->head;
+
 }
 
 bool isFriend(FriendshipFunction* friendshipFunctions, int friendshipThreshold, void* item1, void* item2) {
@@ -303,4 +308,5 @@ void insertNode(Node* head, Node node, int position) {
 	}
 	node->next = current->next;
 	current->next = node;
+    current->friendCount++;
 }

@@ -2,6 +2,9 @@
 #ifndef HACK_ENROLLMENT_H
 #define HACK_ENROLLMENT_H
 
+#define FRIENDSHIP_THRESHOLD 20
+#define RIVALRY_THRESHOLD 0
+
 #include <stdio.h>
 
 typedef struct Student_t {
