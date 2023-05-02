@@ -248,6 +248,7 @@ IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item) {
     }
     int maxPosition = findMaxPosition(queue, item);
     insertNode(queue, new_node, maxPosition);
+    return ISRAELIQUEUE_SUCCESS;
 }
 
 IsraeliQueueError IsraeliQueueImprovePosition(IsraeliQueue queue) {
@@ -257,7 +258,8 @@ IsraeliQueueError IsraeliQueueImprovePosition(IsraeliQueue queue) {
     Node current = queue->head;
     while (current != NULL) {
         int maxPosition = findMaxPosition(queue, current->item);
-
+        removeNode(queue, current);
+        insertNode(queue, current, maxPosition);
     }
 }
 
