@@ -4,14 +4,15 @@
 //write function body 
 EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 {
-	//write function body 
-	return NULL;
+	EnrollmentSystem sys = malloc(sizeof(sys));
+	return sys;
 }
 
 EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 {
+	EnrollmentSystem sys = malloc(sizeof(sys));
 	//write function body 
-	return NULL;
+	return sys;
 }
 
 void hackEnrollment(EnrollmentSystem sys, FILE* out)

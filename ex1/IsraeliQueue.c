@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <assert.h> 
 
+void insertNode(Node* head, Node node, int position);
+void removeNode(Node* head, int position);
+
 int main()
 {
     printf("Hello World\n");

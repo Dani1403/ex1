@@ -6,6 +6,7 @@
 #define RIVALRY_THRESHOLD 0
 
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct Student_t {
 	char* name;
@@ -28,7 +29,7 @@ typedef struct EnrollmentSystem_t {
 	Student* studentsArray;
 	Course* coursesArray;
 	Hacker* hackersArray;
-}EnrollmentSystem;
+}*EnrollmentSystem;
 
 EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers);
 EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues);
