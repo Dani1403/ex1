@@ -22,14 +22,14 @@ typedef struct Hacker_t {
 	int id;
 	int* courseNumbers;
 	int* friendsIds;
-	int* rivalsIds;
+	int* rivalsIds;	
 } *Hacker;
 
 typedef struct EnrollmentSystem_t {
 	Student* studentsArray;
 	Course* coursesArray;
 	Hacker* hackersArray;
-}*EnrollmentSystem;
+} *EnrollmentSystem;
 
 EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers);
 EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues);
