@@ -25,10 +25,16 @@ typedef struct Hacker_t {
 	int* rivalsIds;	
 } *Hacker;
 
+typedef struct Queue_t{
+	int courseNumber;
+	int* studentsIds;
+} *Queue;
+
 typedef struct EnrollmentSystem_t {
 	Student* studentsArray;
 	Course* coursesArray;
 	Hacker* hackersArray;
+	Queue* queuesArray;
 } *EnrollmentSystem;
 
 EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers);

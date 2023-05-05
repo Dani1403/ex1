@@ -18,6 +18,10 @@ Student* readStudents(FILE* students) {
 
 Course* readCourses(FILE* courses) {
 	Course* coursesArray = malloc(sizeof(Course) * 100);
+	if (!coursesArray)
+	{
+		return NULL;
+	}
 	int courseNumber, size;
 	int i = 0;
 	while (fscanf(courses, "%d %d", &courseNumber, &size) != EOF) {
@@ -44,6 +48,8 @@ Hacker* readHackers(FILE* hackers) {
 	return hackersArray;
 }
 
+
+
 EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 {
 	EnrollmentSystem sys = malloc(sizeof(sys));
@@ -57,8 +63,17 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 
 EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 {
-	EnrollmentSystem sys = malloc(sizeof(sys));
-	//write function body 
+	Queue* queuesArray = malloc(sizeof(Queue) * 100);
+	int courseNumber, studentsIds;
+	int i = 0;
+	//TODO : change because the file is not read correctly
+	while (fscanf(queues, "%d %d", &courseNumber, &studentsIds) != EOF) {
+		queuesArray[i] = malloc(sizeof(Queue));
+		queuesArray[i]->courseNumber = courseNumber;
+		queuesArray[i]->studentsIds = studentsIds;
+		i++;
+	}
+	sys->queuesArray = queuesArray;
 	return sys;
 }
 
