@@ -79,6 +79,6 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
 {
-	//write function body 
+	printf("cannot satisy constraints");
 	return;
 }

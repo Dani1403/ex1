@@ -3,13 +3,6 @@
 #include <stdlib.h>
 #include <assert.h> 
 
-int main()
-{
-    printf("Hello World\n");
-    return 0;
-}
-
-
 typedef struct node_t
 {
     void* item;

@@ -36,6 +36,7 @@
   <ItemGroup>
     <ClCompile Include="HackEnrollment.c" />
     <ClCompile Include="IsraeliQueue.c" />
+    <ClCompile Include="main.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
