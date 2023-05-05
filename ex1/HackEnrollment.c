@@ -4,12 +4,12 @@
 //TODO : change because the file is not read correctly
 Student* readStudents(FILE* students) {
 	Student* studentsArray = malloc(sizeof(Student) * 100);
-	char* name;
+	char* studentName;
 	int id;
 	int i = 0;
-	while (fscanf(students, "%s %d", &name, &id) != EOF) {
+	while (fscanf_s(students, "%s %d", &studentName, &id) != EOF) {
 		studentsArray[i] = malloc(sizeof(Student));
-		studentsArray[i]->name = name;
+		studentsArray[i]->name = studentName;
 		studentsArray[i]->id = id;
 		i++;
 	}
@@ -22,11 +22,11 @@ Course* readCourses(FILE* courses) {
 	{
 		return NULL;
 	}
-	int courseNumber, size;
+	int courseNum, size;
 	int i = 0;
-	while (fscanf(courses, "%d %d", &courseNumber, &size) != EOF) {
+	while (fscanf_s(courses, "%d %d", &courseNum, &size) != EOF) {
 		coursesArray[i] = malloc(sizeof(Course));
-		coursesArray[i]->courseNumber = courseNumber;
+		coursesArray[i]->courseNumber = courseNum;
 		coursesArray[i]->size = size;
 		i++;
 	}
@@ -35,11 +35,11 @@ Course* readCourses(FILE* courses) {
 
 Hacker* readHackers(FILE* hackers) {
 	Hacker* hackersArray = malloc(sizeof(Hacker) * 100);
-	int id, courseNumber, friendsIds, rivalsIds;
+	int hackerId, courseNumber, friendsIds, rivalsIds;
 	int i = 0;
-	while (fscanf(hackers, "%d %d %d %d", &id, &courseNumber, &friendsIds, &rivalsIds) != EOF) {
+	while (fscanf_s(hackers, "%d %d %d %d", &hackerId, &courseNumber, &friendsIds, &rivalsIds) != EOF) {
 		hackersArray[i] = malloc(sizeof(Hacker));
-		hackersArray[i]->id = id;
+		hackersArray[i]->id = hackerId;
 		hackersArray[i]->courseNumbers = courseNumber;
 		hackersArray[i]->friendsIds = friendsIds;
 		hackersArray[i]->rivalsIds = rivalsIds;
@@ -64,12 +64,12 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 {
 	Queue* queuesArray = malloc(sizeof(Queue) * 100);
-	int courseNumber, studentsIds;
+	int courseNum, studentsIds;
 	int i = 0;
 	//TODO : change because the file is not read correctly
-	while (fscanf(queues, "%d %d", &courseNumber, &studentsIds) != EOF) {
+	while (fscanf_s(queues, "%d %d", &courseNum, &studentsIds) != EOF) {
 		queuesArray[i] = malloc(sizeof(Queue));
-		queuesArray[i]->courseNumber = courseNumber;
+		queuesArray[i]->courseNumber = courseNum;
 		queuesArray[i]->studentsIds = studentsIds;
 		i++;
 	}

@@ -3,21 +3,19 @@
 #include <stdlib.h>
 #include <assert.h> 
 
-void insertNode(Node* head, Node node, int position);
-void removeNode(Node* head, int position);
-
 int main()
 {
     printf("Hello World\n");
     return 0;
 }
 
+
 typedef struct node_t
 {
     void* item;
     int friendCount;
     int rivalCount;
-    struct node* next;
+    struct node_t* next;
 } *Node;
 
 struct IsraeliQueue_t
@@ -28,6 +26,12 @@ struct IsraeliQueue_t
     ComparisonFunction comparisonFunction;
     Node head;
 };
+
+void insertNode(Node* head, Node node, int position);
+void removeNode(Node* head, int position);
+int findMaxPosition(IsraeliQueue queue, void* item);
+
+
 
 IsraeliQueue IsraeliQueueCreate(FriendshipFunction* friendshipFunctions, ComparisonFunction comparisonFunction, 
                                 int friendshipThreshold, int rivalryThreshold) 
@@ -255,7 +259,7 @@ IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item)
         return ISRAELIQUEUE_SUCCESS;
     }
     int maxPosition = findMaxPosition(queue, item);
-    insertNode(queue, new_node, maxPosition);
+    insertNode(current, new_node, maxPosition);
     return ISRAELIQUEUE_SUCCESS;
 }
 
@@ -272,6 +276,7 @@ IsraeliQueueError IsraeliQueueImprovePosition(IsraeliQueue queue)
         removeNode(queue, current);
         insertNode(queue, current, maxPosition);
     }
+    return ISRAELIQUEUE_SUCCESS;
 }
 
 bool isFriend(FriendshipFunction* friendshipFunctions, int friendshipThreshold, void* item1, void* item2) 
@@ -368,4 +373,5 @@ int findMaxPosition(IsraeliQueue queue, void* item)
             maxPosition = position;
         }
     }
+    return maxPosition;
 }
