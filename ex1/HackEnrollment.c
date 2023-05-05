@@ -78,7 +78,81 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 }
 
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
-{
+{	
 	printf("cannot satisy constraints");
 	return;
+}
+
+/*
+* reads the enrollment system and returns an array of israeli queues corresponding
+*/
+IsraeliQueue* newQueuesArray(EnrollmentSystem sys) {
+	Queue* queuesArray = sys->queuesArray;
+	int numberOfCourses = 0;
+	while (queuesArray[numberOfCourses])
+	{
+		numberOfCourses++;
+	}
+	IsraeliQueue* israeliQueues = malloc(sizeof(IsraeliQueue) * numberOfCourses);
+	for (int i = 0; i < numberOfCourses; i++)
+	{
+		israeliQueues[i] = IsraeliQueueCreate();
+		IsraeliQueueError improvedQueue = IsraeliQueueImprovePositions(israeliQueues[i]);
+		if (improvedQueue != ISRAELIQUEUE_SUCCESS)
+		{
+			return NULL;
+		}
+	}
+}
+
+FriendshipFunction* createFrenshipFunctions(Hacker* hackersArray) {
+	FriendshipFunction* friendshipFunctions = malloc(3 * sizeof(FriendshipFunction));
+}
+
+int friendWithHacker(int studentId, Hacker* hackersArray) {
+	int hacker = 0;
+	while (hackersArray[hacker])
+	{
+		int hackerId = hackersArray[hacker]->id;
+		int friend = 0, rival = 0;
+		while (hackersArray[hacker]->friendsIds[friend])
+		{
+			if (hackersArray[hacker]->friendsIds[friend] == studentId)
+			{
+				return FRIENDSHIP_THRESHOLD;
+			}
+		}
+		while (hackersArray[hacker]->rivalsIds[rival])
+		{
+			if (hackersArray[hacker]->rivalsIds[rival] == studentId)
+			{
+				return -FRIENDSHIP_THRESHOLD;
+			}
+		}
+	}
+}
+
+int abs(int num)
+{
+	return num < 0 ? -num : num;
+}
+
+int nameDistance(char* name1, char* name2) {
+	int sum1 = 0, sum2 = 0, i = 0;
+	while (name1[i])
+	{
+		sum1 += name1[i];
+		i++;
+	}
+	i = 0;
+	while (name2[i])
+	{
+		sum2 += name2[i];
+		i++;
+	}
+	return abs(sum1 - sum2);
+}
+
+int idDistance(int id1, int id2) {
+	return abs(id1 - id2);
 }
