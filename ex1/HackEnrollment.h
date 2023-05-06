@@ -8,9 +8,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*The student should have a friendWithHacker end a rivalWithHacker arrays
+* containing the ids of the hackers that are his friends and rivals respectively.
+*/
 typedef struct Student_t {
 	char* name;
 	int id;
+	int* hackerFriends;
+	int* hackerRivals;
 } *Student;
 
 typedef struct Course_t {

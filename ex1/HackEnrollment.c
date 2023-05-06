@@ -54,6 +54,7 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 	sys->coursesArray = readCourses(courses);
 	sys->studentsArray = readStudents(students);
 	sys->hackersArray = readHackers(hackers);
+	addFriendshipWithHacker(sys->studentsArray, sys->hackersArray);
 	return sys;
 }
 
@@ -105,27 +106,19 @@ FriendshipFunction* createFrenshipFunctions(Hacker* hackersArray) {
 	friendshipFunctions[3] = NULL;
 }
 
-int friendWithHacker(int studentId, Hacker* hackersArray) {
-	int hacker = 0;
-	while (hackersArray[hacker])
+int friendWithHacker(Student student1, Student student2) {
+	int student1Id = student1->id;
+	int student2Id = student2->id;
+	int i = 0;
+	while (student1->hackerFriends[i])
 	{
-		int hackerId = hackersArray[hacker]->id;
-		int friend = 0, rival = 0;
-		while (hackersArray[hacker]->friendsIds[friend])
+		if (student1->hackerFriends[i] == student2Id)
 		{
-			if (hackersArray[hacker]->friendsIds[friend] == studentId)
-			{
-				return FRIENDSHIP_THRESHOLD;
-			}
+			return 1;
 		}
-		while (hackersArray[hacker]->rivalsIds[rival])
-		{
-			if (hackersArray[hacker]->rivalsIds[rival] == studentId)
-			{
-				return -FRIENDSHIP_THRESHOLD;
-			}
-		}
+		i++;
 	}
+	return 0;
 }
 
 int abs(int num)
@@ -133,7 +126,9 @@ int abs(int num)
 	return num < 0 ? -num : num;
 }
 
-int nameDistance(char* name1, char* name2) {
+int nameDistance(Student student1, Student student2) {
+	char* name1 = student1->name;
+	char* name2 = student2->name;
 	int sum1 = 0, sum2 = 0, i = 0;
 	while (name1[i])
 	{
@@ -149,6 +144,41 @@ int nameDistance(char* name1, char* name2) {
 	return abs(sum1 - sum2);
 }
 
-int idDistance(int id1, int id2) {
+int idDistance(Student student1, Student student2) {
+	int id1 = student1->id;
+	int id2 = student2->id;
 	return abs(id1 - id2);
+}
+
+//update the fields of the students if they are friends with a hacker
+void addFriendshipWithHacker(Student* students, Hacker* hackers) {
+	int student = 0;
+	while (students[student])
+	{
+		int studentId = students[student]->id;
+		int hacker = 0;
+		while (hackers[hacker])
+		{
+			int hackerFriend = 0;
+			while (hackers[hacker]->friendsIds[hackerFriend])
+			{
+				if (hackers[hacker]->friendsIds[hackerFriend] == studentId)
+				{
+					//update the student's friends array
+				}
+				hackerFriend++;
+			}
+			int hackerRival = 0;
+			while (hackers[hacker]->rivalsIds[hackerRival])
+			{
+				if (hackers[hacker]->rivalsIds[hackerRival] == studentId)
+				{
+					//update the student's rivals array
+				}
+				hackerRival++;
+			}
+			hacker++;
+		}
+		student++;
+		}
 }
