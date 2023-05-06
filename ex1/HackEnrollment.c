@@ -48,8 +48,6 @@ Hacker* readHackers(FILE* hackers) {
 	return hackersArray;
 }
 
-
-
 EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 {
 	EnrollmentSystem sys = malloc(sizeof(sys));
@@ -58,8 +56,6 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 	sys->hackersArray = readHackers(hackers);
 	return sys;
 }
-
-
 
 EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 {
@@ -97,16 +93,16 @@ IsraeliQueue* newQueuesArray(EnrollmentSystem sys) {
 	for (int i = 0; i < numberOfCourses; i++)
 	{
 		israeliQueues[i] = IsraeliQueueCreate();
-		IsraeliQueueError improvedQueue = IsraeliQueueImprovePositions(israeliQueues[i]);
-		if (improvedQueue != ISRAELIQUEUE_SUCCESS)
-		{
-			return NULL;
-		}
 	}
+	return israeliQueues;
 }
 
 FriendshipFunction* createFrenshipFunctions(Hacker* hackersArray) {
-	FriendshipFunction* friendshipFunctions = malloc(3 * sizeof(FriendshipFunction));
+	FriendshipFunction* friendshipFunctions = malloc(4 * sizeof(FriendshipFunction));
+	friendshipFunctions[0] = &friendWithHacker;
+	friendshipFunctions[1] = &nameDistance;
+	friendshipFunctions[2] = &idDistance;
+	friendshipFunctions[3] = NULL;
 }
 
 int friendWithHacker(int studentId, Hacker* hackersArray) {
