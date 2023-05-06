@@ -1,6 +1,16 @@
 #include "HackEnrollment.h"
 #include "../ex1/ex1/IsraeliQueue.h"
 
+int getSizeOfArray(int* array);
+int abs(int num);
+void addFriendshipWithHacker(Student* students, Hacker* hackers);
+bool checkFriendshipFromArray(Student student1, Student student2);
+bool checkRivalryFromArray(Student student1, Student student2);
+FriendshipFunction* createFrenshipFunctions(Hacker* hackersArray);
+int comparisonFunction(Student student1, Student student2);
+IsraeliQueue* newQueuesArray(EnrollmentSystem sys);
+
+
 //TODO : change because the file is not read correctly
 Student* readStudents(FILE* students) {
 	Student* studentsArray = malloc(sizeof(Student) * 100);
@@ -91,32 +101,31 @@ IsraeliQueue* newQueuesArray(EnrollmentSystem sys) {
 		numberOfCourses++;
 	}
 	IsraeliQueue* israeliQueues = malloc(sizeof(IsraeliQueue) * numberOfCourses);
+	FriendshipFunction* friendshipFunctions = createFrenshipFunctions(sys->hackersArray);
 	for (int i = 0; i < numberOfCourses; i++)
 	{
-		israeliQueues[i] = IsraeliQueueCreate();
+		israeliQueues[i] = IsraeliQueueCreate(friendshipFunctions, comparisonFunction, FRIENDSHIP_THRESHOLD, RIVALRY_THRESHOLD);
 	}
 	return israeliQueues;
 }
 
 FriendshipFunction* createFrenshipFunctions(Hacker* hackersArray) {
 	FriendshipFunction* friendshipFunctions = malloc(4 * sizeof(FriendshipFunction));
-	friendshipFunctions[0] = &friendWithHacker;
+	friendshipFunctions[0] = &friendOrRivalWithHacker;
 	friendshipFunctions[1] = &nameDistance;
 	friendshipFunctions[2] = &idDistance;
 	friendshipFunctions[3] = NULL;
+	return friendshipFunctions;
 }
 
-int friendWithHacker(Student student1, Student student2) {
-	int student1Id = student1->id;
-	int student2Id = student2->id;
-	int i = 0;
-	while (student1->hackerFriends[i])
+int friendOrRivalWithHacker(Student student1, Student student2) {
+	if (checkFriendshipFromArray(student1, student2) || checkFriendshipFromArray(student2, student1))
 	{
-		if (student1->hackerFriends[i] == student2Id)
-		{
-			return 1;
-		}
-		i++;
+		return FRIENDSHIP_THRESHOLD;
+	}
+	else if (checkRivalryFromArray(student1, student2) || checkRivalryFromArray(student2, student1))
+	{
+		return RIVALRY_THRESHOLD;
 	}
 	return 0;
 }
@@ -164,7 +173,14 @@ void addFriendshipWithHacker(Student* students, Hacker* hackers) {
 			{
 				if (hackers[hacker]->friendsIds[hackerFriend] == studentId)
 				{
-					//update the student's friends array
+					int size = getSizeOfArray(students[student]->hackerFriends);
+					int* newHackerFriends = malloc(sizeof(int) * (size + 1));
+					for (int i = 0; i < size; i++)
+					{
+						newHackerFriends[i] = students[student]->hackerFriends[i];
+					}
+					newHackerFriends[size] = hackers[hacker]->id;
+					students[student]->hackerFriends = newHackerFriends;
 				}
 				hackerFriend++;
 			}
@@ -173,7 +189,14 @@ void addFriendshipWithHacker(Student* students, Hacker* hackers) {
 			{
 				if (hackers[hacker]->rivalsIds[hackerRival] == studentId)
 				{
-					//update the student's rivals array
+					int size = getSizeOfArray(students[student]->hackerRivals);
+					int* newHackerRivals = malloc(sizeof(int) * (size + 1));
+					for (int i = 0; i < size; i++)
+					{
+						newHackerRivals[i] = students[student]->hackerRivals[i];
+					}
+					newHackerRivals[size] = hackers[hacker]->id;
+					students[student]->hackerRivals = newHackerRivals;
 				}
 				hackerRival++;
 			}
@@ -181,4 +204,48 @@ void addFriendshipWithHacker(Student* students, Hacker* hackers) {
 		}
 		student++;
 		}
+}
+
+int getSizeOfArray(int* array) {
+	int size = 0;
+	while (array[size])
+	{
+		size++;
+	}
+	return size;
+}
+
+bool checkFriendshipFromArray(Student student1, Student student2)
+{
+	int student2Id = student2->id;
+	int i = 0;
+	while (student1->hackerFriends[i])
+	{
+		if (student1->hackerFriends[i] == student2Id)
+		{
+			return true;
+		}
+		i++;
+	}
+	return false;
+}
+
+bool checkRivalryFromArray(Student student1, Student student2)
+{
+	int student2Id = student2->id;
+	int i = 0;
+	while (student1->hackerRivals[i])
+	{
+		if (student1->hackerRivals[i] == student2Id)
+		{
+			return true;
+		}
+		i++;
+	}
+	return false;
+}
+
+int comparisonFunction(Student student1, Student student2)
+{
+	return student1->id == student2->id;
 }

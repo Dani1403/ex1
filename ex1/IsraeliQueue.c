@@ -132,7 +132,7 @@ bool IsraeliQueueContains(IsraeliQueue queue, void* item)
     Node current = queue->head;
     while (current != NULL)
     {
-        if (queue->comparisonFunction(current->item, item) == 0)
+        if (queue->comparisonFunction(current->item, item))
         {
             return true;
         }

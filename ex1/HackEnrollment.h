@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 /*The student should have a friendWithHacker end a rivalWithHacker arrays
 * containing the ids of the hackers that are his friends and rivals respectively.
