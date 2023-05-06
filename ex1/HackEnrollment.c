@@ -11,9 +11,22 @@ int comparisonFunction(Student student1, Student student2);
 IsraeliQueue* newQueuesArray(EnrollmentSystem sys);
 
 
-//TODO : change because the file is not read correctly
+int Line_counter(FILE* file){
+    if(!file) return -1;
+    int i = 0;
+    char current;
+    while((current = fgetc (file)) != EOF){
+        if(current == '\n'){
+            i++;
+        }
+    }
+    return i;
+}
+
 Student* readStudents(FILE* students) {
-	Student* studentsArray = malloc(sizeof(Student) * 100);
+	Student* studentsArray = malloc(sizeof(Student) * Line_counter(students));
+    //TO DO: quel message renvoyer si Line_counter renvoie -1 ???(cad fichier vide)
+
 	char* studentName;
 	int id;
 	int i = 0;
@@ -27,11 +40,11 @@ Student* readStudents(FILE* students) {
 }
 
 Course* readCourses(FILE* courses) {
-	Course* coursesArray = malloc(sizeof(Course) * 100);
-	if (!coursesArray)
-	{
-		return NULL;
-	}
+	Course* coursesArray = malloc(sizeof(Course) * Line_counter(courses));
+    //TO DO: quel message renvoyer si Line_counter renvoie -1 ???(cad fichier vide)
+
+    if (!coursesArray) return NULL;
+
 	int courseNum, size;
 	int i = 0;
 	while (fscanf_s(courses, "%d %d", &courseNum, &size) != EOF) {
@@ -44,7 +57,10 @@ Course* readCourses(FILE* courses) {
 }
 
 Hacker* readHackers(FILE* hackers) {
-	Hacker* hackersArray = malloc(sizeof(Hacker) * 100);
+	Hacker* hackersArray = malloc(sizeof(Hacker) * Line_counter(hackers));
+    //Verifier avec Daniel si cette technique peut marcher pour le fichier hackers
+
+    if (!hackersArray) return NULL;
 	int hackerId, courseNumber, friendsIds, rivalsIds;
 	int i = 0;
 	while (fscanf_s(hackers, "%d %d %d %d", &hackerId, &courseNumber, &friendsIds, &rivalsIds) != EOF) {
@@ -86,7 +102,7 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
 {	
-	printf("cannot satisy constraints");
+	printf("cannot satisfy constraints");
 	return;
 }
 
