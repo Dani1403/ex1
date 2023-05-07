@@ -105,6 +105,15 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
 {	
+	for (sys->coursesArray)
+	{
+		//createIsraeliQueue;
+		//enqueue those already in the queue: for (queues->studentsIds);
+		//enqueue hackers in order: for (hackers->courseNumber) if courseNumber == course->courseNumber
+		//check that the hackers got in the course: if (position(hackerId) < course->size);
+		// update the queue: sys->queuesArray[] = queue;
+		//print the queue in out: printQueue(out,sys->queuesArray[]);
+	}
 	printf("cannot satisfy constraints");
 	return;
 }
