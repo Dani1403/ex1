@@ -3,9 +3,12 @@
 
 int getSizeOfArray(int* array);
 int abs(int num);
+int nameDistance(Student student1, Student student2);
+int idDistance(Student student1, Student student2);
 void addFriendshipWithHacker(Student* students, Hacker* hackers);
 bool checkFriendshipFromArray(Student student1, Student student2);
 bool checkRivalryFromArray(Student student1, Student student2);
+int friendOrRivalWithHacker(Student student1, Student student2);
 FriendshipFunction* createFrenshipFunctions(Hacker* hackersArray);
 int comparisonFunction(Student student1, Student student2);
 IsraeliQueue* newQueuesArray(EnrollmentSystem sys);
@@ -101,6 +104,10 @@ IsraeliQueue* newQueuesArray(EnrollmentSystem sys) {
 		numberOfCourses++;
 	}
 	IsraeliQueue* israeliQueues = malloc(sizeof(IsraeliQueue) * numberOfCourses);
+	if (!israeliQueues)
+	{
+		return NULL;
+	}
 	FriendshipFunction* friendshipFunctions = createFrenshipFunctions(sys->hackersArray);
 	for (int i = 0; i < numberOfCourses; i++)
 	{
@@ -111,6 +118,10 @@ IsraeliQueue* newQueuesArray(EnrollmentSystem sys) {
 
 FriendshipFunction* createFrenshipFunctions(Hacker* hackersArray) {
 	FriendshipFunction* friendshipFunctions = malloc(4 * sizeof(FriendshipFunction));
+	if (!friendshipFunctions)
+	{
+		return NULL;
+	}
 	friendshipFunctions[0] = &friendOrRivalWithHacker;
 	friendshipFunctions[1] = &nameDistance;
 	friendshipFunctions[2] = &idDistance;
