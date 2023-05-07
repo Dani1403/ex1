@@ -105,41 +105,23 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
 {	
-	for (sys->coursesArray)
+	Hacker* hackersArray = sys->hackersArray;
+	Course* coursesArray = sys->coursesArray;
+	Queue* queuesArray = sys->queuesArray;
+	Student* studentsArray = sys->studentsArray;
+	FriendshipFunction* friendshipFunctions = createFrenshipFunctions(hackersArray);
+	int course = 0;
+	while (coursesArray[course])
 	{
-		//createIsraeliQueue;
-		//enqueue those already in the queue: for (queues->studentsIds);
-		//enqueue hackers in order: for (hackers->courseNumber) if courseNumber == course->courseNumber
-		//check that the hackers got in the course: if (position(hackerId) < course->size);
-		// update the queue: sys->queuesArray[] = queue;
-		//print the queue in out: printQueue(out,sys->queuesArray[]);
+		Queue queue = findQueueCorresponding(queuesArray, coursesArray[course]->courseNumber);
+		IsraeliQueue newQueue = IsraeliQueueCreate(friendshipFunctions, comparisonFunction, FRIENDSHIP_THRESHOLD, RIVALRY_THRESHOLD);
+		newQueue = enqueueStudentsInIsraeliQueue(newQueue, studentsArray, queue);
+		Hacker* hackersToPlace;
 	}
 	printf("cannot satisfy constraints");
 	return;
 }
 
-/*
-* reads the enrollment system and returns an array of israeli queues corresponding
-*/
-IsraeliQueue* newQueuesArray(EnrollmentSystem sys) {
-	Queue* queuesArray = sys->queuesArray;
-	int numberOfCourses = 0;
-	while (queuesArray[numberOfCourses])
-	{
-		numberOfCourses++;
-	}
-	IsraeliQueue* israeliQueues = malloc(sizeof(IsraeliQueue) * numberOfCourses);
-	if (!israeliQueues)
-	{
-		return NULL;
-	}
-	FriendshipFunction* friendshipFunctions = createFrenshipFunctions(sys->hackersArray);
-	for (int i = 0; i < numberOfCourses; i++)
-	{
-		israeliQueues[i] = IsraeliQueueCreate(friendshipFunctions, comparisonFunction, FRIENDSHIP_THRESHOLD, RIVALRY_THRESHOLD);
-	}
-	return israeliQueues;
-}
 
 FriendshipFunction* createFrenshipFunctions(Hacker* hackersArray) {
 	FriendshipFunction* friendshipFunctions = malloc(4 * sizeof(FriendshipFunction));
@@ -284,4 +266,71 @@ bool checkRivalryFromArray(Student student1, Student student2)
 int comparisonFunction(Student student1, Student student2)
 {
 	return student1->id == student2->id;
+}
+
+Queue findQueueCorresponding(Queue* queuesArray, int course)
+{
+	int i = 0;
+	while (queuesArray[i])
+	{
+		if (queuesArray[i]->courseNumber == course)
+		{
+			return queuesArray[i];
+		}
+	}
+	return NULL;
+}
+
+
+//Find the student that are in the actual queue and enqueues them in the new israeliQueue
+IsraeliQueue enqueueStudentsInIsraeliQueue(IsraeliQueue israeliQueue, Student* studentArr, Queue queue)
+{
+	int id = 0;
+	while (queue->studentsIds[id])
+	{
+		int student = 0;
+		while (studentArr[student])
+		{
+			if (studentArr[student]->id == queue->studentsIds[id])
+			{
+				IsraeliQueue err = IsraeliQueueEnqueue(israeliQueue, studentArr[student]);
+				if (err != ISRAELIQUEUE_SUCCESS)
+				{
+					return NULL;
+				}
+			}
+			student++;
+		}
+		id++;
+	}
+	return israeliQueue;
+}
+
+IsraeliQueue enqueueHackerInIsraeliQueue(IsraeliQueue israeliQueue, Course course, Hacker* hackerArray, Student* studentArray)
+{
+	int courseNumber = course->courseNumber;
+	int hacker = 0;
+	while (hackerArray[hacker])
+	{
+		int askedCourse = 0;
+		while (hackerArray[hacker]->courseNumbers[askedCourse])
+		{
+			if (courseNumber == hackerArray[hacker]->courseNumbers[askedCourse])
+			{
+				int student = 0;
+				while (studentArray[student])
+				{
+					if (studentArray[student]->id == hackerArray[hacker]->id)
+					{
+						IsraeliQueueError err = IsraeliQueueEnqueue(israeliQueue, studentArray[student]);
+						if (err != ISRAELIQUEUE_SUCCESS)
+						{
+							return NULL;
+						}
+					}
+				}
+			}
+		}
+	}
+	return israeliQueue;
 }
