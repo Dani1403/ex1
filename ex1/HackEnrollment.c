@@ -15,7 +15,7 @@ IsraeliQueue* newQueuesArray(EnrollmentSystem sys);
 
 
 int Line_counter(FILE* file){
-    if(!file) return -1;
+    if(!file) return 0;
     int i = 0;
     char current;
     while((current = fgetc (file)) != EOF){
@@ -28,7 +28,8 @@ int Line_counter(FILE* file){
 
 Student* readStudents(FILE* students) {
 	Student* studentsArray = malloc(sizeof(Student) * Line_counter(students));
-    //TO DO: quel message renvoyer si Line_counter renvoie -1 ???(cad fichier vide)
+
+    if (!studentsArray) return NULL;
 
 	char* studentName;
 	int id;
@@ -44,7 +45,6 @@ Student* readStudents(FILE* students) {
 
 Course* readCourses(FILE* courses) {
 	Course* coursesArray = malloc(sizeof(Course) * Line_counter(courses));
-    //TO DO: quel message renvoyer si Line_counter renvoie -1 ???(cad fichier vide)
 
     if (!coursesArray) return NULL;
 
@@ -60,10 +60,10 @@ Course* readCourses(FILE* courses) {
 }
 
 Hacker* readHackers(FILE* hackers) {
-	Hacker* hackersArray = malloc(sizeof(Hacker) * Line_counter(hackers));
-    //Verifier avec Daniel si cette technique peut marcher pour le fichier hackers
+	Hacker* hackersArray = malloc(sizeof(Hacker) * (Line_counter(hackers) % 4));
 
     if (!hackersArray) return NULL;
+
 	int hackerId, courseNumber, friendsIds, rivalsIds;
 	int i = 0;
 	while (fscanf_s(hackers, "%d %d %d %d", &hackerId, &courseNumber, &friendsIds, &rivalsIds) != EOF) {
