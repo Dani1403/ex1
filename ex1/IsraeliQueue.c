@@ -87,7 +87,7 @@ IsraeliQueueError IsraeliQueueAddFriendshipMeasure(IsraeliQueue queue, Friendshi
     {
         i++;
     }
-    FriendshipFunction* newFriendshipFunctions = malloc((i + 2) * sizeof(*newFriendshipFunctions));
+    FriendshipFunction* newFriendshipFunctions = malloc((i + 3) * sizeof(*newFriendshipFunctions));
     if (!newFriendshipFunctions)
     {
 		return ISRAELIQUEUE_ALLOC_FAILED;
