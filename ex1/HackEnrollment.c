@@ -2,7 +2,7 @@
 #include "../ex1/ex1/IsraeliQueue.h"
 
 int getSizeOfArray(int* array);
-int abs(int num);
+int absolute(int num);
 int nameDistance(Student student1, Student student2);
 int idDistance(Student student1, Student student2);
 void addFriendshipWithHacker(Student* students, Hacker* hackers);
@@ -11,7 +11,8 @@ bool checkRivalryFromArray(Student student1, Student student2);
 int friendOrRivalWithHacker(Student student1, Student student2);
 FriendshipFunction* createFrenshipFunctions(Hacker* hackersArray);
 int comparisonFunction(Student student1, Student student2);
-IsraeliQueue* newQueuesArray(EnrollmentSystem sys);
+IsraeliQueue enqueueHackersInIsraeliQueue(IsraeliQueue israeliQueue, Course course, Hacker* hackerArray, Student* studentArray);
+IsraeliQueue enqueueStudentsInIsraeliQueue(IsraeliQueue israeliQueue, Student* studentArr, Queue queue);
 
 
 int Line_counter(FILE* file){
@@ -116,9 +117,9 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
 		Queue queue = findQueueCorresponding(queuesArray, coursesArray[course]->courseNumber);
 		IsraeliQueue newQueue = IsraeliQueueCreate(friendshipFunctions, comparisonFunction, FRIENDSHIP_THRESHOLD, RIVALRY_THRESHOLD);
 		newQueue = enqueueStudentsInIsraeliQueue(newQueue, studentsArray, queue);
-		Hacker* hackersToPlace;
+		newQueue = enqueueHackersInIsraeliQueue(newQueue, coursesArray[course], hackersArray, studentsArray);
 	}
-	printf("cannot satisfy constraints");
+	fprintf(out, "cannot satisfy constraints");
 	return;
 }
 
@@ -148,7 +149,7 @@ int friendOrRivalWithHacker(Student student1, Student student2) {
 	return 0;
 }
 
-int abs(int num)
+int absolute(int num)
 {
 	return num < 0 ? -num : num;
 }
@@ -306,7 +307,8 @@ IsraeliQueue enqueueStudentsInIsraeliQueue(IsraeliQueue israeliQueue, Student* s
 	return israeliQueue;
 }
 
-IsraeliQueue enqueueHackerInIsraeliQueue(IsraeliQueue israeliQueue, Course course, Hacker* hackerArray, Student* studentArray)
+//find the hackers that want the course and enqueues them in the israeliqueue corresponding to the course
+IsraeliQueue enqueueHackersInIsraeliQueue(IsraeliQueue israeliQueue, Course course, Hacker* hackerArray, Student* studentArray)
 {
 	int courseNumber = course->courseNumber;
 	int hacker = 0;

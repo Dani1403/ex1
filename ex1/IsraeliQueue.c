@@ -368,3 +368,20 @@ int findMaxPosition(IsraeliQueue queue, void* item)
     }
     return maxPosition;
 }
+
+int getPosition(IsraeliQueue queue, void* item)
+{
+    int size = IsraeliQueueSize(queue);
+    Node current = queue->head;
+    int position = size;
+    while (current)
+    {
+        if (current->item == item)
+        {
+            break;
+        }
+        current = current->next;
+        position--;
+    }
+    return position;
+}
