@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ComparisonAndFriendship.h" />
     <ClInclude Include="ex1\IsraeliQueue.h" />
     <ClInclude Include="HackEnrollment.h" />
   </ItemGroup>
@@ -34,6 +35,7 @@
     <Text Include="ex1\ExampleTest\students.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ComparisonAndFriendship.c" />
     <ClCompile Include="HackEnrollment.c" />
     <ClCompile Include="IsraeliQueue.c" />
     <ClCompile Include="main.c" />
