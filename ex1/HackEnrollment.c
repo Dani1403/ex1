@@ -18,6 +18,19 @@ int Line_counter(FILE* file){
     return i;
 }
 
+int Queue_counter(FILE* file) {
+    if (!file) return 0;
+    int count = 0;
+    int courseNum, studentsIds;
+
+    while (fscanf_s(file, "%d %d", &courseNum, &studentsIds) == 2) {
+        count++;
+    }
+
+    return count;
+}
+
+
 Student* readStudents(FILE* students) {
 	Student* studentsArray = malloc(sizeof(Student) * Line_counter(students));
 
@@ -81,7 +94,9 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 
 EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 {
-	Queue* queuesArray = malloc(sizeof(Queue) * 100);
+	Queue* queuesArray = malloc(sizeof(Queue) * Queue_counter(queues));
+    if (!queuesArray) return NULL;
+
 	int courseNum, studentsIds;
 	int i = 0;
 	//TODO : change because the file is not read correctly
