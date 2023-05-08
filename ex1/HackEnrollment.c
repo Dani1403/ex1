@@ -2,6 +2,7 @@
 #include "../ex1/ex1/IsraeliQueue.h"
 #include "ComparisonAndFriendship.h"
 
+
 IsraeliQueue enqueueHackersInIsraeliQueue(IsraeliQueue israeliQueue, Course course, Hacker* hackerArray, Student* studentArray);
 IsraeliQueue enqueueStudentsInIsraeliQueue(IsraeliQueue israeliQueue, Student* studentArr, Queue queue);
 
@@ -10,7 +11,7 @@ int Line_counter(FILE* file){
     if(!file) return 0;
     int i = 0;
     char current;
-    while((current = fgetc (file)) != EOF){
+    while((current = fgetc(file)) != EOF){
         if(current == '\n'){
             i++;
         }
@@ -23,7 +24,7 @@ int Queue_counter(FILE* file) {
     int count = 0;
     int courseNum, studentsIds;
 
-    while (fscanf_s(file, "%d %d", &courseNum, &studentsIds) == 2) {
+    while (fscanf(file, "%d %d", &courseNum, &studentsIds) == 2) {
         count++;
     }
 
@@ -39,7 +40,7 @@ Student* readStudents(FILE* students) {
 	char* studentName;
 	int id;
 	int i = 0;
-	while (fscanf_s(students, "%s %d", &studentName, &id) != EOF) {
+	while (fscanf(students, "%s %d", &studentName, &id) != EOF) {
 		studentsArray[i] = malloc(sizeof(Student));
 		studentsArray[i]->name = studentName;
 		studentsArray[i]->id = id;
@@ -55,7 +56,7 @@ Course* readCourses(FILE* courses) {
 
 	int courseNum, size;
 	int i = 0;
-	while (fscanf_s(courses, "%d %d", &courseNum, &size) != EOF) {
+	while (fscanf(courses, "%d %d", &courseNum, &size) != EOF) {
 		coursesArray[i] = malloc(sizeof(Course));
 		coursesArray[i]->courseNumber = courseNum;
 		coursesArray[i]->size = size;
@@ -71,7 +72,7 @@ Hacker* readHackers(FILE* hackers) {
 
 	int hackerId, courseNumber, friendsIds, rivalsIds;
 	int i = 0;
-	while (fscanf_s(hackers, "%d %d %d %d", &hackerId, &courseNumber, &friendsIds, &rivalsIds) != EOF) {
+	while (fscanf(hackers, "%d %d %d %d", &hackerId, &courseNumber, &friendsIds, &rivalsIds) != EOF) {
 		hackersArray[i] = malloc(sizeof(Hacker));
 		hackersArray[i]->id = hackerId;
 		hackersArray[i]->courseNumbers = courseNumber;
@@ -100,7 +101,7 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 	int courseNum, studentsIds;
 	int i = 0;
 	//TODO : change because the file is not read correctly
-	while (fscanf_s(queues, "%d %d", &courseNum, &studentsIds) != EOF) {
+	while (fscanf(queues, "%d %d", &courseNum, &studentsIds) != EOF) {
 		queuesArray[i] = malloc(sizeof(Queue));
 		queuesArray[i]->courseNumber = courseNum;
 		queuesArray[i]->studentsIds = studentsIds;
@@ -109,7 +110,6 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 	sys->queuesArray = queuesArray;
 	return sys;
 }
-
 
 Queue findQueueCorresponding(Queue* queuesArray, int course)
 {
@@ -149,7 +149,7 @@ IsraeliQueue enqueueStudentsInIsraeliQueue(IsraeliQueue israeliQueue, Student* s
 		{
 			if (studentArr[student]->id == queue->studentsIds[id])
 			{
-				IsraeliQueue err = IsraeliQueueEnqueue(israeliQueue, studentArr[student]);
+				IsraeliQueueError err = IsraeliQueueEnqueue(israeliQueue, studentArr[student]);
 				if (err != ISRAELIQUEUE_SUCCESS)
 				{
 					return NULL;
@@ -252,13 +252,13 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
 		newQueue = enqueueHackersInIsraeliQueue(newQueue, coursesArray[course], hackersArray, studentsArray);
 		queue = updateFromIsraeli(newQueue, queue);
 	}
-	//pour chaque hacker, on regarde si il a eu le ou les cours qu'il voulait
 	int hacker = 0;
-	while (hackersArray[hacker])
+	bool flag = true;
+	while (hackersArray[hacker] && flag)
 	{
 		int coursesNotReceived = 0;
 		int courseNum = 0;
-		while (hackersArray[hacker]->courseNumbers[courseNum]) //pour chaque cours demandé
+		while (hackersArray[hacker]->courseNumbers[courseNum]) 
 		{
 			Course course = findCourseCorresponding(coursesArray, hackersArray[hacker]->courseNumbers[courseNum]);
 			Queue queue = findQueueCorresponding(queuesArray, course->courseNumber);
@@ -268,6 +268,7 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
 				if (coursesNotReceived == getSizeOfArray(hackersArray[hacker]->courseNumbers))
 				{
 					fprintf(out, "Cannot satisfy constraints for %d", hackersArray[hacker]->id);
+					flag = false;
 					break;
 				}
 			} 
@@ -275,6 +276,9 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
 		}
 		hacker++;
 	}
-	printQueuesInFile(queuesArray, out);
+	if (flag)
+	{
+		printQueuesInFile(queuesArray, out);
+	}
 	return;
 }
