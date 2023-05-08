@@ -95,24 +95,6 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 	return sys;
 }
 
-void hackEnrollment(EnrollmentSystem sys, FILE* out)
-{	
-	Hacker* hackersArray = sys->hackersArray;
-	Course* coursesArray = sys->coursesArray;
-	Queue* queuesArray = sys->queuesArray;
-	Student* studentsArray = sys->studentsArray;
-	FriendshipFunction* friendshipFunctions = createFrenshipFunctions(hackersArray);
-	int course = 0;
-	while (coursesArray[course])
-	{
-		Queue queue = findQueueCorresponding(queuesArray, coursesArray[course]->courseNumber);
-		IsraeliQueue newQueue = IsraeliQueueCreate(friendshipFunctions, comparisonFunction, FRIENDSHIP_THRESHOLD, RIVALRY_THRESHOLD);
-		newQueue = enqueueStudentsInIsraeliQueue(newQueue, studentsArray, queue);
-		newQueue = enqueueHackersInIsraeliQueue(newQueue, coursesArray[course], hackersArray, studentsArray);
-	}
-	fprintf(out, "cannot satisfy constraints");
-	return;
-}
 
 Queue findQueueCorresponding(Queue* queuesArray, int course)
 {
@@ -122,6 +104,19 @@ Queue findQueueCorresponding(Queue* queuesArray, int course)
 		if (queuesArray[i]->courseNumber == course)
 		{
 			return queuesArray[i];
+		}
+	}
+	return NULL;
+}
+
+Course findCourseCorresponding(Course* coursesArray, int courseNum)
+{
+	int i = 0;
+	while (coursesArray[i])
+	{
+		if (coursesArray[i]->courseNumber == courseNum)
+		{
+			return coursesArray[i];
 		}
 	}
 	return NULL;
@@ -180,4 +175,74 @@ IsraeliQueue enqueueHackersInIsraeliQueue(IsraeliQueue israeliQueue, Course cour
 		}
 	}
 	return israeliQueue;
+}
+
+Queue updateFromIsraeli(IsraeliQueue israeliQueue, Queue queue)
+{
+	int size = IsraeliQueueSize(israeliQueue);
+	int* newStudentsIds = malloc(sizeof(int) * size);
+	for (int student = 0; student <= size; student++)
+	{
+		Student foremostStudent = IsraeliQueueDequeue(israeliQueue);
+		newStudentsIds[student] = foremostStudent->id;
+	}
+	queue->studentsIds = newStudentsIds;
+	return queue;
+}
+
+int getHackerPosition(Hacker hacker, Queue queue)
+{
+	int hackerId = hacker->id;
+	int i = 0;
+	while (queue->studentsIds[i])
+	{
+		if (queue->studentsIds[i] == hackerId)
+		{
+			return i + 1;
+		}
+	}
+	return getSizeOfArray(queue->studentsIds);
+}
+
+
+void hackEnrollment(EnrollmentSystem sys, FILE* out)
+{	
+	Hacker* hackersArray = sys->hackersArray;
+	Course* coursesArray = sys->coursesArray;
+	Queue* queuesArray = sys->queuesArray;
+	Student* studentsArray = sys->studentsArray;
+	FriendshipFunction* friendshipFunctions = createFrenshipFunctions(hackersArray);
+	int course = 0;
+	while (coursesArray[course])
+	{
+		Queue queue = findQueueCorresponding(queuesArray, coursesArray[course]->courseNumber);
+		IsraeliQueue newQueue = IsraeliQueueCreate(friendshipFunctions, comparisonFunction, FRIENDSHIP_THRESHOLD, RIVALRY_THRESHOLD);
+		newQueue = enqueueStudentsInIsraeliQueue(newQueue, studentsArray, queue);
+		newQueue = enqueueHackersInIsraeliQueue(newQueue, coursesArray[course], hackersArray, studentsArray);
+		queue = updateFromIsraeli(newQueue, queue);
+	}
+	//pour chaque hacker, on regarde si il a eu le ou les cours qu'il voulait
+	int hacker = 0;
+	while (hackersArray[hacker])
+	{
+		int coursesNotReceived = 0;
+		int courseNum = 0;
+		while (hackersArray[hacker]->courseNumbers[courseNum]) //pour chaque cours demandé
+		{
+			Course course = findCourseCorresponding(coursesArray, hackersArray[hacker]->courseNumbers[courseNum]);
+			Queue queue = findQueueCorresponding(queuesArray, course->courseNumber);
+			if (getHackerPosition(hacker, queue) > course->size)
+			{
+				coursesNotReceived++;
+				if (coursesNotReceived == getSizeOfArray(hackersArray[hacker]->courseNumbers))
+				{
+					fprintf(out, "Cannot satisfy constraints for %d", hackersArray[hacker]->id);
+					break;
+				}
+			} 
+			courseNum++;
+		}
+		hacker++;
+	}
+	return;
 }
