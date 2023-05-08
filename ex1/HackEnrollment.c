@@ -219,6 +219,22 @@ int getHackerPosition(Hacker hacker, Queue queue)
 	return getSizeOfArray(queue->studentsIds);
 }
 
+void printQueuesInFile(Queue* queuesArray, FILE* out)
+{
+	int queue = 0;
+	while (queuesArray[queue])
+	{
+		fprintf(out, "%d ", queuesArray[queue]->courseNumber);
+		int position = 0;
+		while (queuesArray[queue]->studentsIds[position])
+		{
+			fprintf(out, "%d", queuesArray[queue]->studentsIds[position]);
+			position++;
+		}
+		fputc('/n', out);
+	}
+}
+
 
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
 {	
