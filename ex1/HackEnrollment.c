@@ -275,5 +275,6 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
 		}
 		hacker++;
 	}
+	printQueuesInFile(queuesArray, out);
 	return;
 }
