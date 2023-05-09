@@ -1,4 +1,5 @@
-#include "ex1/IsraeliQueue.h"
+#include "../IsraeliQueue.h"
+#include "../Node.h"
 #include "HackEnrollment.h"
 #include <stdlib.h>	
 
