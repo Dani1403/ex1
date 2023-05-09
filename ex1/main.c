@@ -1,8 +1,10 @@
-#include "HackEnrollment.h"
-#include "../ex1/ex1/IsraeliQueue.h"
 
+#include "../ex1/ex1/IsraeliQueue.h"
+#include <stdlib.h>
+/*
 int main(int argc, char** argv)
 {
+
 	FILE* students = fopen(argv[2], "r");
 	FILE* courses = fopen(argv[3], "r");
 	FILE* hackers = fopen(argv[4], "r");
@@ -16,5 +18,11 @@ int main(int argc, char** argv)
 	fclose(hackers);
 	fclose(queues);
 	fclose(out);
+	return 0;
+}
+
+*/
+int main() {
+	test();
 	return 0;
 }

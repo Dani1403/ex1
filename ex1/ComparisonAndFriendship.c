@@ -14,10 +14,6 @@ int getSizeOfArray(int* array) {
 	return size;
 }
 
-
-
-
-
 int nameDistance(Student student1, Student student2) {
 	char* name1 = student1->name;
 	char* name2 = student2->name;
