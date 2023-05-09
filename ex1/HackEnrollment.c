@@ -392,55 +392,6 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers) 
 
 /////////////////////////////////////////readEnrollment////////////////////////////////////////////////////////
 
-
-int numOfCourses(EnrollmentSystem sys) {
-    int count = 0;
-    for (int i = 0; sys->coursesArray[i] != NULL; i++) {
-        count++;
-    }
-    return count;
-}
-
-int numOfStudents(EnrollmentSystem sys) {
-    int count = 0;
-    for (int i = 0; i != EOF; i++) {
-        if (sys->studentsArray[i] != NULL) {
-            count++;
-        }
-    }
-    return count;
-}
-
-int numOfHackers(EnrollmentSystem sys) {
-    int count = 0;
-    for (int i = 0; i != EOF; i++) {
-        if (sys->hackersArray[i] != NULL) {
-            count++;
-        }
-    }
-    return count;
-}
-
-int findCourse(EnrollmentSystem sys, long courseNumber) {
-    int numCourses = numOfCourses(sys);
-    for (int i = 0; i < numCourses; i++) {
-        if (sys->coursesArray[i]->courseNumber == courseNumber) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-Student findStudentById(int studentId, EnrollmentSystem sys) {
-    int numStudents = numOfStudents(sys);
-    for (int i = 0; i < numStudents; i++) {
-        if (sys->studentsArray[i]->id == studentId) {
-            return sys->studentsArray[i];
-        }
-    }
-    return NULL;
-}
-
 Queue createQueueFromLine(char* line) {
     int i = 0;
     Queue queue = malloc(sizeof(*queue));
