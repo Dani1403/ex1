@@ -19,7 +19,8 @@
 /*The student should have a friendWithHacker end a rivalWithHacker arrays
 * containing the ids of the hackers that are his friends and rivals respectively.
 */
-typedef struct Student_t {
+typedef struct Student_t
+{
 	char* firstName;
 	char* lastName;
 	int id;
@@ -31,24 +32,28 @@ typedef struct Student_t {
 	int* hackerRivals;
 } *Student;
 
-typedef struct Course_t {
+typedef struct Course_t
+{
 	int courseNumber;
 	int size;
 } *Course;
 
-typedef struct Hacker_t {
+typedef struct Hacker_t
+{
 	int id;
 	int* courseNumbers;
 	int* friendsIds;
 	int* rivalsIds;	
 } *Hacker;
 
-typedef struct Queue_t{
+typedef struct Queue_t
+{
 	int courseNumber;
 	int* studentsIds;
 } *Queue;
 
-typedef struct EnrollmentSystem_t {
+typedef struct EnrollmentSystem_t
+{
 	Student* studentsArray;
 	Course* coursesArray;
 	Hacker* hackersArray;
