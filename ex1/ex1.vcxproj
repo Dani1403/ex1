@@ -22,6 +22,7 @@
     <ClInclude Include="ComparisonAndFriendship.h" />
     <ClInclude Include="ex1\IsraeliQueue.h" />
     <ClInclude Include="HackEnrollment.h" />
+    <ClInclude Include="Node.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ex1\EX1.pdf" />

@@ -1,7 +1,7 @@
+#include "ex1/IsraeliQueue.h"
+#include "HackEnrollment.h"
+#include <stdlib.h>	
 
-#include "../ex1/ex1/IsraeliQueue.h"
-#include <stdlib.h>
-/*
 int main(int argc, char** argv)
 {
 
@@ -18,11 +18,5 @@ int main(int argc, char** argv)
 	fclose(hackers);
 	fclose(queues);
 	fclose(out);
-	return 0;
-}
-
-*/
-int main() {
-	test();
 	return 0;
 }

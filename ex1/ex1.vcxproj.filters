@@ -24,6 +24,9 @@
     <ClInclude Include="ComparisonAndFriendship.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ex1\finalCheck.sh" />

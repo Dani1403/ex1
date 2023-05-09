@@ -1,24 +1,9 @@
 #include "ex1/IsraeliQueue.h"
+#include "Node.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
-typedef struct node_t
-{
-    void* item;
-    int friendCount;
-    int rivalCount;
-    struct node_t* next;
-} *Node;
-
-struct IsraeliQueue_t
-{
-    int friendshipThreshold;
-    int rivalryThreshold;
-    FriendshipFunction* friendshipFunctions;
-    ComparisonFunction comparisonFunction;
-    Node tail;
-};
 
 void improveNode(IsraeliQueue queue, Node nodeToImprove);
 
@@ -236,7 +221,7 @@ IsraeliQueue IsraeliQueueMerge(IsraeliQueue* qarr, ComparisonFunction compare_fu
             j++;
         }
     }
-    FriendshipFunction* newTab = malloc((newNumberOfFriendshipFunc + 1) * sizeof(*newTab));
+    FriendshipFunction* newTab = (FriendshipFunction*)malloc((newNumberOfFriendshipFunc + 1) * sizeof(*newTab));
     int idx = 0;
     for (int i = 0; i < num_queues; i++)
     {
@@ -349,7 +334,7 @@ bool isFriend(IsraeliQueue queue, void* item1, void* item2)
     {
         return false;
     }
-    int i;
+    int i = 0;
     while (queue->friendshipFunctions[i] != NULL)
     {
         if (queue->friendshipFunctions[i](item1, item2) > queue->friendshipThreshold)
@@ -365,7 +350,7 @@ bool isEnemy(IsraeliQueue queue, void* item1, void* item2)
 {
     if (!queue || !*(queue->friendshipFunctions))
         return false;
-    int i, friendshipThresholdAverage = 0;
+    int i = 0, friendshipThresholdAverage = 0;
     while (queue->friendshipFunctions[i] != NULL)
     {
         friendshipThresholdAverage += queue->friendshipFunctions[i](item1, item2);
@@ -510,60 +495,4 @@ int mockfriendshipfunction(void* firstObject, void* secondObject)
 {
     int temp = (*(int*)firstObject) + (*(int*)secondObject) + 5;
     return temp;
-}
-
-int main()
-{
-    int arr[] = { 1, 2, 3, 4 };
-    printf("Test 1: Create queue\n");
-    FriendshipFunction functions[] = { mockfriendshipfunction, NULL };
-    IsraeliQueue queue = IsraeliQueueCreate(functions, comparison_function_mock, 100, 0);
-    for (int i = 0; i < 4; i++)
-    {
-        IsraeliQueueEnqueue(queue, &arr[i]);
-        printf("Enqueue: %d\n", arr[i]);
-    }
-    printf("Test 2: Enqueue\n");
-    printf("The size of queue is %d\n", IsraeliQueueSize(queue));
-    IsraeliQueueError error = IsraeliQueueAddFriendshipMeasure(queue, mockfriendshipfunction);
-    if (error != ISRAELIQUEUE_SUCCESS)
-    {
-        printf("error\n");
-    }
-    printf("Test 2.1: Add Friendship Measure\n");
-    IsraeliQueue p = IsraeliQueueClone(queue);
-    Node toPrintj = p->tail;
-    for (int i = 0; i < IsraeliQueueSize(p); i++)
-    {
-        printf("%d->", *(int*)(toPrintj->item));
-        toPrintj = toPrintj->next;
-    }
-    printf("\n");
-    IsraeliQueue j = IsraeliQueueClone(queue);
-    IsraeliQueue m = IsraeliQueueClone(queue);
-    printf("Test 3: Clone\n");
-    IsraeliQueueDequeue(p);
-    IsraeliQueueDequeue(p);
-    IsraeliQueueDequeue(j);
-    IsraeliQueueDequeue(j);
-    IsraeliQueueDequeue(j);
-    IsraeliQueueDequeue(m);
-    printf("Test 4: Dequeue\n");
-    IsraeliQueueError err = IsraeliQueueImprovePositions(queue);
-    if (err != ISRAELIQUEUE_SUCCESS)
-    {
-        printf("error\n");
-    }
-    printf("Test 5: Improve Positions\n");
-    Node toPrint = queue->tail;
-    for (int i = 0; i < IsraeliQueueSize(queue); i++)
-    {
-        printf("%d->", *(int*)(toPrint->item));
-        toPrint = toPrint->next;
-    }
-    printf(("\n"));
-    IsraeliQueueDestroy(queue);
-    printf("Test 7: Destroy\n");
-    printf(("\n"));
-    return 0;
 }
