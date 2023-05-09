@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ComparisonAndFriendship.h" />
     <ClInclude Include="ex1\IsraeliQueue.h" />
-    <ClInclude Include="HackEnrollment.h" />
+    <ClInclude Include="IsraeliQueue.h" />
+    <ClInclude Include="tool\HackEnrollment.h" />
     <ClInclude Include="Node.h" />
   </ItemGroup>
   <ItemGroup>
@@ -36,10 +36,9 @@
     <Text Include="ex1\ExampleTest\students.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ComparisonAndFriendship.c" />
-    <ClCompile Include="HackEnrollment.c" />
+    <ClCompile Include="tool\HackEnrollment.c" />
     <ClCompile Include="IsraeliQueue.c" />
-    <ClCompile Include="main.c" />
+    <ClCompile Include="tool\main.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

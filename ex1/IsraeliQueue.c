@@ -1,4 +1,4 @@
-#include "ex1/IsraeliQueue.h"
+#include "IsraeliQueue.h"
 #include "Node.h"
 #include <stdio.h>
 #include <stdlib.h>

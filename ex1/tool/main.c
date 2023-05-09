@@ -4,7 +4,7 @@
 
 int main(int argc, char** argv)
 {
-
+	printf("sdd");
 	FILE* students = fopen(argv[2], "r");
 	FILE* courses = fopen(argv[3], "r");
 	FILE* hackers = fopen(argv[4], "r");

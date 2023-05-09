@@ -18,13 +18,13 @@
     <ClInclude Include="ex1\IsraeliQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HackEnrollment.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ComparisonAndFriendship.h">
+    <ClInclude Include="tool\HackEnrollment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IsraeliQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -43,13 +43,10 @@
     <ClCompile Include="IsraeliQueue.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HackEnrollment.c">
+    <ClCompile Include="tool\HackEnrollment.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ComparisonAndFriendship.c">
+    <ClCompile Include="tool\main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

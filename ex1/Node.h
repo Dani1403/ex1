@@ -2,7 +2,7 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include "ex1/IsraeliQueue.h"
+#include "IsraeliQueue.h"
 typedef struct node_t
 {
     void* item;
