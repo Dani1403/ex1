@@ -2,7 +2,6 @@
 #include "Node.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 
 
 void improveNode(IsraeliQueue queue, Node nodeToImprove);
