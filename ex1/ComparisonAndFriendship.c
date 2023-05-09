@@ -15,8 +15,8 @@ int getSizeOfArray(int* array) {
 }
 
 int nameDistance(Student student1, Student student2) {
-	char* name1 = student1->name;
-	char* name2 = student2->name;
+	char* name1 = student1->firstName;
+	char* name2 = student2->firstName;
 	int sum1 = 0, sum2 = 0, i = 0;
 	while (name1[i])
 	{
@@ -142,5 +142,5 @@ FriendshipFunction* createFrenshipFunctions(Hacker* hackersArray) {
 
 int comparisonFunction(Student student1, Student student2)
 {
-	return student1->id == student2->id;
+	return student1->id - student2->id;
 }

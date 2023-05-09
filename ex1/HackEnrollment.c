@@ -7,7 +7,8 @@ IsraeliQueue enqueueHackersInIsraeliQueue(IsraeliQueue israeliQueue, Course cour
 IsraeliQueue enqueueStudentsInIsraeliQueue(IsraeliQueue israeliQueue, Student* studentArr, Queue queue);
 
 
-int Line_counter(FILE* file){
+int Line_counter(FILE* file)
+{
     if(!file) return 0;
     int i = 0;
     char current;
@@ -19,7 +20,8 @@ int Line_counter(FILE* file){
     return i;
 }
 
-int Queue_counter(FILE* file) {
+int Queue_counter(FILE* file) 
+{
     if (!file) return 0;
     int count = 0;
     int courseNum, studentsIds;
@@ -33,16 +35,21 @@ int Queue_counter(FILE* file) {
 
 
 Student* readStudents(FILE* students) {
-	Student* studentsArray = malloc(sizeof(Student) * Line_counter(students));
+	Student* studentsArray = (Student*)malloc(sizeof(Student) * Line_counter(students));
 
     if (!studentsArray) return NULL;
-
-	char* studentName;
+	char* firstName;
+	char* lastName;
 	int id;
+	int gpa;
+	int points;
+	char* city;
+	char* department;
 	int i = 0;
-	while (fscanf(students, "%s %d", &studentName, &id) != EOF) {
-		studentsArray[i] = malloc(sizeof(Student));
-		studentsArray[i]->name = studentName;
+	while (fscanf(students, "%d %d %d %s %s %s %s", &id, &points, &gpa, firstName, lastName, city, department) != EOF) {
+		studentsArray[i] = (Student)malloc(sizeof(Student));
+		studentsArray[i]->firstName = firstName;
+		studentsArray[i]->lastName = lastName;
 		studentsArray[i]->id = id;
 		i++;
 	}
@@ -50,14 +57,14 @@ Student* readStudents(FILE* students) {
 }
 
 Course* readCourses(FILE* courses) {
-	Course* coursesArray = malloc(sizeof(Course) * Line_counter(courses));
+	Course* coursesArray = (Course*)malloc(sizeof(Course) * Line_counter(courses));
 
     if (!coursesArray) return NULL;
 
 	int courseNum, size;
 	int i = 0;
 	while (fscanf(courses, "%d %d", &courseNum, &size) != EOF) {
-		coursesArray[i] = malloc(sizeof(Course));
+		coursesArray[i] = (Course)malloc(sizeof(Course));
 		coursesArray[i]->courseNumber = courseNum;
 		coursesArray[i]->size = size;
 		i++;
@@ -66,14 +73,14 @@ Course* readCourses(FILE* courses) {
 }
 
 Hacker* readHackers(FILE* hackers) {
-	Hacker* hackersArray = malloc(sizeof(Hacker) * (Line_counter(hackers) % 4));
+	Hacker* hackersArray = (Hacker*)malloc(sizeof(Hacker) * (Line_counter(hackers) % 4));
 
     if (!hackersArray) return NULL;
 
 	int hackerId, courseNumber, friendsIds, rivalsIds;
 	int i = 0;
 	while (fscanf(hackers, "%d %d %d %d", &hackerId, &courseNumber, &friendsIds, &rivalsIds) != EOF) {
-		hackersArray[i] = malloc(sizeof(Hacker));
+		hackersArray[i] = (Hacker)malloc(sizeof(Hacker));
 		hackersArray[i]->id = hackerId;
 		hackersArray[i]->courseNumbers = courseNumber;
 		hackersArray[i]->friendsIds = friendsIds;
@@ -85,7 +92,7 @@ Hacker* readHackers(FILE* hackers) {
 
 EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 {
-	EnrollmentSystem sys = malloc(sizeof(sys));
+	EnrollmentSystem sys = (EnrollmentSystem)malloc(sizeof(sys));
 	sys->coursesArray = readCourses(courses);
 	sys->studentsArray = readStudents(students);
 	sys->hackersArray = readHackers(hackers);
@@ -95,14 +102,14 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 
 EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 {
-	Queue* queuesArray = malloc(sizeof(Queue) * Queue_counter(queues));
+	Queue* queuesArray = (Queue*)malloc(sizeof(Queue) * Queue_counter(queues));
     if (!queuesArray) return NULL;
 
 	int courseNum, studentsIds;
 	int i = 0;
 	//TODO : change because the file is not read correctly
 	while (fscanf(queues, "%d %d", &courseNum, &studentsIds) != EOF) {
-		queuesArray[i] = malloc(sizeof(Queue));
+		queuesArray[i] = (Queue)malloc(sizeof(Queue));
 		queuesArray[i]->courseNumber = courseNum;
 		queuesArray[i]->studentsIds = studentsIds;
 		i++;

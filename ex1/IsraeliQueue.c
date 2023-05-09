@@ -11,7 +11,7 @@ IsraeliQueue IsraeliQueueCreate(FriendshipFunction* friendshipFunctions, Compari
     int friendshipThreshold, int rivalryThreshold)
 {
     IsraeliQueue newQueue = (IsraeliQueue)malloc(sizeof(*newQueue));
-    if (newQueue == NULL)
+    if (newQueue == NULL) 
     {
         return NULL;
     }

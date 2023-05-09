@@ -13,8 +13,13 @@
 * containing the ids of the hackers that are his friends and rivals respectively.
 */
 typedef struct Student_t {
-	char* name;
+	char* firstName;
+	char* lastName;
 	int id;
+	int gpa;
+	int points;
+	char* city;
+	char* department;
 	int* hackerFriends;
 	int* hackerRivals;
 } *Student;
