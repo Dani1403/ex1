@@ -1,8 +1,12 @@
 #include "HackEnrollment.h"
 
-// Comparison And Friendship Functions
+//helper functions
 int getSizeOfArray(int* array);
 int absolute(int num);
+IsraeliQueue enqueueHackersInIsraeliQueue(IsraeliQueue israeliQueue, Course course, Hacker* hackerArray, Student* studentArray);
+IsraeliQueue enqueueStudentsInIsraeliQueue(IsraeliQueue israeliQueue, Student* studentArr, Queue queue);
+
+// Comparison And Friendship Functions
 int nameDistance(Student student1, Student student2);
 int idDistance(Student student1, Student student2);
 void addFriendshipWithHacker(Student* students, Hacker* hackers);
@@ -149,21 +153,11 @@ int comparisonFunction(Student student1, Student student2)
 }
 
 ///////Free functions
-void freeArray(void** arr, int currIndex)
-{
-    while (currIndex >= 0)
-    {
-        free(arr[currIndex]);
-        currIndex--;
-    }
-    free(arr);
-}
 
-
-void freeHackerArray(Hacker* hackerArr, int numOfHackers)
+void freeHackerArray(Hacker* hackerArr)
 {
     int hacker = 0;
-    while (hacker < numOfHackers)
+    while (hackerArr[hacker])
     {
         free(hackerArr[hacker]->courseNumbers);
         free(hackerArr[hacker]->friendsIds);
@@ -173,10 +167,10 @@ void freeHackerArray(Hacker* hackerArr, int numOfHackers)
     free(hackerArr);
 }
 
-void deleteStudentArray(Student* studentArr, int numOfStudent)
+void freeStudentArray(Student* studentArr)
 {
     int student = 0;
-    while (student < numOfStudent)
+    while (student < studentArr[student])
     {
         free(studentArr[student]->firstName);
         free(studentArr[student]->lastName);
@@ -190,10 +184,37 @@ void deleteStudentArray(Student* studentArr, int numOfStudent)
     free(studentArr);
 }
 
+void freeCourseArray(Course* courseArr)
+{
+    int course = 0;
+    while (courseArr[course])
+    {
+        free(courseArr[course]);
+    }
+    free(courseArr);
+}
+
+void freeQueueArray(Queue* queueArr)
+{
+    int queue = 0;
+    while (queueArr[queue])
+    {
+        free(queueArr[queue]->studentsIds);
+        free(queueArr[queue]);
+    }
+    free(queueArr);
+}
+
+void freeEnrollmentSystem(EnrollmentSystem sys)
+{
+    freeStudentArray(sys->studentsArray);
+    freeHackerArray(sys->hackersArray);
+    freeCourseArray(sys->coursesArray);
+    freeQueueArray(sys->queuesArray);
+    free(sys);
+}
 
 ////////////////////////// Create Enrollment 
-IsraeliQueue enqueueHackersInIsraeliQueue(IsraeliQueue israeliQueue, Course course, Hacker* hackerArray, Student* studentArray);
-IsraeliQueue enqueueStudentsInIsraeliQueue(IsraeliQueue israeliQueue, Student* studentArr, Queue queue);
 
 void initArray(void** arr, int length)
 {
@@ -779,6 +800,7 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
         newQueue = enqueueStudentsInIsraeliQueue(newQueue, studentsArray, queue);
         newQueue = enqueueHackersInIsraeliQueue(newQueue, coursesArray[course], hackersArray, studentsArray);
         queue = updateFromIsraeli(newQueue, queue);
+        IsraeliQueueDestroy(newQueue);
     }
     int hacker = 0;
     bool flag = true;
