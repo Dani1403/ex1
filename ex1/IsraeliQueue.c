@@ -481,17 +481,3 @@ int getPosition(IsraeliQueue queue, void* item)
     }
     return position;
 }
-
-int comparison_function_mock(void* obj1, void* obj2)
-{
-    int id1 = *(int*)obj1;
-    int id2 = *(int*)obj2;
-
-    return id1 - id2;
-}
-
-int mockfriendshipfunction(void* firstObject, void* secondObject)
-{
-    int temp = (*(int*)firstObject) + (*(int*)secondObject) + 5;
-    return temp;
-}
