@@ -10,6 +10,7 @@
 #define MAX_LINE_LENGTH 1000
 #define IDLEN 9
 #define MAX_FRIENDS 20
+#define LINE_SIZE 256
 
 #include <stdio.h>
 #include <stdlib.h>

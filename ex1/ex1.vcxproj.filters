@@ -38,6 +38,7 @@
     <Text Include="ex1\ExampleTest\out.txt" />
     <Text Include="ex1\ExampleTest\queues.txt" />
     <Text Include="ex1\ExampleTest\students.txt" />
+    <Text Include="makefile.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IsraeliQueue.c">
