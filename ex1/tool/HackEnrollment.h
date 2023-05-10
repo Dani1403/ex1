@@ -64,6 +64,7 @@ typedef struct EnrollmentSystem_t
 EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers);
 EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues);
 void hackEnrollment(EnrollmentSystem sys, FILE* out);
+void freeEnrollmentSystem(EnrollmentSystem sys);
 
 
 #endif /*HACK_ENROLLMENT_H*/

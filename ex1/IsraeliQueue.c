@@ -382,7 +382,6 @@ Node FindFarthestFriendBeforeEnemy(IsraeliQueue queue, Node toImprove, Node enem
     Node curr = lastFriendBeforeEnemy->next;
     while (curr != NULL && curr != enemy)
     {
-        printf("");
         if ((isFriend(queue, toImprove->item, curr->item)) && (curr->friendCount < FRIEND_QUOTA))
         {
             lastFriendBeforeEnemy = curr;
