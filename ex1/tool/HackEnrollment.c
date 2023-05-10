@@ -214,6 +214,16 @@ void freeEnrollmentSystem(EnrollmentSystem sys)
     free(sys);
 }
 
+void freeArray(void** array, int currentIndex)
+{
+    while (currentIndex >= 0)
+    {
+        free(array[currentIndex]);
+        currentIndex--;
+    }
+    free(array);
+}
+
 ////////////////////////// Create Enrollment 
 
 void initArray(void** arr, int length)
@@ -597,7 +607,7 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
     system->coursesArray = courseEnrollment(courses, nbOfLinesInFile(courses));
     if (!system->coursesArray)
     {
-        // free student
+        freeStudentArray(system->studentsArray);
         free(system);
         return NULL;
     }
@@ -605,8 +615,8 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
     system->hackersArray = hackerEnrollment(hackers, nbOfLinesInFile(hackers));
     if (!system->hackersArray)
     {
-        // free students
-        freeArray((void**)system->coursesArray, nbOfLinesInFile(courses) - 1);
+        freeStudentArray(system->studentsArray);
+        freeCourseArray(system->coursesArray);
         free(system);
         return NULL;
     }
