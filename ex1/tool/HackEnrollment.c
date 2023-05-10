@@ -473,12 +473,12 @@ Hacker* createHackerFromLine(char* line)
     }
 
     // Lire les autres champs
-    int i = IDLEN + 1; // index après l'ID et le '\n'
+    int i = IDLEN + 1; // index aprï¿½s l'ID et le '\n'
     int* desiredCourses = readIntArray(line + i, &i);
     int* friendsId = readIntArray(line + i, &i);
     int* enemiesId = readIntArray(line + i, &i);
 
-    // Créer l'objet Hacker
+    // Crï¿½er l'objet Hacker
     Hacker hacker = malloc(sizeof(Hacker));
     hacker->id = id;
     hacker->courseNumbers = desiredCourses;
@@ -490,11 +490,11 @@ Hacker* createHackerFromLine(char* line)
 
 Hacker* hackerEnrollment(FILE* hackers, int numOfStudents)
 {
-    // Créer le tableau de pointeurs de Hacker
+    // Crï¿½er le tableau de pointeurs de Hacker
     Hacker* hackerArray = malloc(numOfStudents * sizeof(Hacker));
     int i = 0;
 
-    // Lire chaque ligne du fichier et créer un objet Hacker correspondant
+    // Lire chaque ligne du fichier et crï¿½er un objet Hacker correspondant
     char line[BUFFER];
     while (fgets(line, BUFFER, hackers))
     {
@@ -560,6 +560,7 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
     {
         return NULL;
     }
+
     EnrollmentSystem system = malloc(sizeof(*system));
     if (!system)
     {
@@ -576,7 +577,7 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
     system->coursesArray = courseEnrollment(courses, nbOfLinesInFile(courses));
     if (!system->coursesArray)
     {
-        // free student
+        deleteStudentArray(system->studentsArray, nbOfLinesInFile(students));
         free(system);
         return NULL;
     }
@@ -584,13 +585,25 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
     system->hackersArray = hackerEnrollment(hackers, nbOfLinesInFile(hackers));
     if (!system->hackersArray)
     {
-        // free students
+        deleteStudentArray(system->studentsArray, nbOfLinesInFile(students));
         freeArray((void**)system->coursesArray, nbOfLinesInFile(courses) - 1);
         free(system);
         return NULL;
     }
+
+    system->queuesArray = readEnrollment(system, queues);
+    if (!system->queuesArray)
+    {
+        deleteStudentArray(system->studentsArray, nbOfLinesInFile(students));
+        freeArray((void**)system->coursesArray, nbOfLinesInFile(courses) - 1);
+        freeHackerArray(system->hackersArray, nbOfLinesInFile(hackers));
+        free(system);
+        return NULL;
+    }
+
     return system;
 }
+
 
 /////////////////////////////////////////readEnrollment////////////////////////////////////////////////////////
 
