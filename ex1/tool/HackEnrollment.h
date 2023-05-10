@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include "../IsraeliQueue.h"
 
 /*The student should have a friendWithHacker end a rivalWithHacker arrays
 * containing the ids of the hackers that are his friends and rivals respectively.
@@ -66,4 +67,3 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out);
 
 
 #endif /*HACK_ENROLLMENT_H*/
-

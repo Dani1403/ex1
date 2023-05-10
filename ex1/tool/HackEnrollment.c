@@ -1,6 +1,4 @@
 #include "HackEnrollment.h"
-#include "../IsraeliQueue.h"
-#include "../Node.h"
 
 // Comparison And Friendship Functions
 int getSizeOfArray(int* array);
@@ -11,7 +9,6 @@ void addFriendshipWithHacker(Student* students, Hacker* hackers);
 bool checkFriendshipFromArray(Student student1, Student student2);
 bool checkRivalryFromArray(Student student1, Student student2);
 int friendOrRivalWithHacker(Student student1, Student student2);
-FriendshipFunction* createFrenshipFunctions(Hacker* hackersArray);
 int comparisonFunction(Student student1, Student student2);
 
 int absolute(int num)
@@ -144,20 +141,6 @@ int friendOrRivalWithHacker(Student student1, Student student2)
         return RIVALRY_THRESHOLD;
     }
     return 0;
-}
-
-FriendshipFunction* createFrenshipFunctions(Hacker* hackersArray)
-{
-    FriendshipFunction* friendshipFunctions = malloc(4 * sizeof(FriendshipFunction));
-    if (!friendshipFunctions)
-    {
-        return NULL;
-    }
-    friendshipFunctions[0] = &friendOrRivalWithHacker;
-    friendshipFunctions[1] = &nameDistance;
-    friendshipFunctions[2] = &idDistance;
-    friendshipFunctions[3] = NULL;
-    return friendshipFunctions;
 }
 
 int comparisonFunction(Student student1, Student student2)
@@ -709,15 +692,21 @@ IsraeliQueue enqueueHackersInIsraeliQueue(IsraeliQueue israeliQueue, Course cour
                 {
                     if (studentArray[student]->id == hackerArray[hacker]->id)
                     {
+                        if (IsraeliQueueContains(studentArray[student])) {
+                            break;
+                        }
                         IsraeliQueueError err = IsraeliQueueEnqueue(israeliQueue, studentArray[student]);
                         if (err != ISRAELIQUEUE_SUCCESS)
                         {
                             return NULL;
                         }
                     }
+                    student++;
                 }
             }
+            askedCourse++;
         }
+        hacker++;
     }
     return israeliQueue;
 }
@@ -771,12 +760,14 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
     Course* coursesArray = sys->coursesArray;
     Queue* queuesArray = sys->queuesArray;
     Student* studentsArray = sys->studentsArray;
-    FriendshipFunction* friendshipFunctions = createFrenshipFunctions(hackersArray);
     int course = 0;
     while (coursesArray[course])
     {
         Queue queue = findQueueCorresponding(queuesArray, coursesArray[course]->courseNumber);
-        IsraeliQueue newQueue = IsraeliQueueCreate(friendshipFunctions, comparisonFunction, FRIENDSHIP_THRESHOLD, RIVALRY_THRESHOLD);
+        IsraeliQueue newQueue = IsraeliQueueCreate(NULL, comparisonFunction, FRIENDSHIP_THRESHOLD, RIVALRY_THRESHOLD);
+        IsraeliQueueAddFriendshipMeasure(newQueue, &nameDistance);
+        IsraeliQueueAddFriendshipMeasure(newQueue, &idDistance);
+        IsraeliQueueAddFriendshipMeasure(newQueue, &friendOrRivalWithHacker);
         newQueue = enqueueStudentsInIsraeliQueue(newQueue, studentsArray, queue);
         newQueue = enqueueHackersInIsraeliQueue(newQueue, coursesArray[course], hackersArray, studentsArray);
         queue = updateFromIsraeli(newQueue, queue);
