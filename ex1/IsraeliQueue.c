@@ -6,6 +6,8 @@
 
 void improveNode(IsraeliQueue queue, Node nodeToImprove);
 
+// Creates a new IsraeliQueue with specified friendship functions, comparison function,
+// friendship threshold, and rivalry threshold
 IsraeliQueue IsraeliQueueCreate(FriendshipFunction* friendshipFunctions, ComparisonFunction comparisonFunction,
     int friendshipThreshold, int rivalryThreshold)
 {
@@ -35,6 +37,7 @@ IsraeliQueue IsraeliQueueCreate(FriendshipFunction* friendshipFunctions, Compari
     return newQueue;
 }
 
+// Frees memory allocated for a given IsraeliQueue and its nodes
 void IsraeliQueueDestroy(IsraeliQueue queue)
 {
     if (queue == NULL)
@@ -52,6 +55,7 @@ void IsraeliQueueDestroy(IsraeliQueue queue)
     free(queue);
 }
 
+// Returns the size of IsraeliQueue
 int IsraeliQueueSize(IsraeliQueue queue)
 {
     if (queue == NULL)
@@ -68,6 +72,7 @@ int IsraeliQueueSize(IsraeliQueue queue)
     return size;
 }
 
+// Adds a friendship measure function to the IsraeliQueue
 IsraeliQueueError IsraeliQueueAddFriendshipMeasure(IsraeliQueue queue, FriendshipFunction friendshipFunction)
 {
     if (queue == NULL || friendshipFunction == NULL)
@@ -97,6 +102,7 @@ IsraeliQueueError IsraeliQueueAddFriendshipMeasure(IsraeliQueue queue, Friendshi
     return ISRAELIQUEUE_SUCCESS;
 }
 
+// Updates the friendship threshold of the IsraeliQueue
 IsraeliQueueError IsraeliQueueUpdateFriendshipThreshold(IsraeliQueue queue, int newFriendshipThreshold)
 {
     if (queue == NULL)
@@ -107,6 +113,7 @@ IsraeliQueueError IsraeliQueueUpdateFriendshipThreshold(IsraeliQueue queue, int 
     return ISRAELIQUEUE_SUCCESS;
 }
 
+// Updates the rivalry threshold of the IsraeliQueue
 IsraeliQueueError IsraeliQueueUpdateRivalryThreshold(IsraeliQueue queue, int newRivalryThreshold)
 {
     if (queue == NULL)
@@ -117,6 +124,7 @@ IsraeliQueueError IsraeliQueueUpdateRivalryThreshold(IsraeliQueue queue, int new
     return ISRAELIQUEUE_SUCCESS;
 }
 
+// Checks if the given IsraeliQueue contains the specified item
 bool IsraeliQueueContains(IsraeliQueue queue, void* item)
 {
     if (queue == NULL || item == NULL)
@@ -135,6 +143,7 @@ bool IsraeliQueueContains(IsraeliQueue queue, void* item)
     return false;
 }
 
+// Removes and returns the item at the head of the IsraeliQueue
 void* IsraeliQueueDequeue(IsraeliQueue queue)
 {
     if (queue == NULL || IsraeliQueueSize(queue) == 0)
@@ -161,6 +170,7 @@ void* IsraeliQueueDequeue(IsraeliQueue queue)
     return item;
 }
 
+// Clones the given IsraeliQueue, returning a new IsraeliQueue with the same items
 IsraeliQueue IsraeliQueueClone(IsraeliQueue queue)
 {
     if (queue == NULL)
@@ -188,7 +198,9 @@ IsraeliQueue IsraeliQueueClone(IsraeliQueue queue)
     return new_queue;
 }
 
-IsraeliQueue IsraeliQueueMerge(IsraeliQueue* qarr, ComparisonFunction compare_function) {
+// Merges an array of IsraeliQueues into a single IsraeliQueue
+IsraeliQueue IsraeliQueueMerge(IsraeliQueue* qarr, ComparisonFunction compare_function)
+{
     if (qarr == NULL)
     {
         return NULL; // Return NULL if qarr is NULL
@@ -259,6 +271,7 @@ IsraeliQueue IsraeliQueueMerge(IsraeliQueue* qarr, ComparisonFunction compare_fu
     return merged_queue;
 }
 
+// Adds an item to the tail of the IsraeliQueue and improves the node's position if necessary
 IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item)
 {
     if (queue == NULL || item == NULL)
@@ -279,6 +292,7 @@ IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item)
     return ISRAELIQUEUE_SUCCESS;
 }
 
+// Inserts the given node after the specified friend node in the IsraeliQueue
 void IsraeliQueueInsertNode(IsraeliQueue queue, Node friend, Node item)
 {
     if (queue == NULL || item == NULL)
@@ -303,6 +317,7 @@ void IsraeliQueueInsertNode(IsraeliQueue queue, Node friend, Node item)
     previous->next = item;
 }
 
+// Removes the specified node from the IsraeliQueue
 void IsraeliQueueRemoveNode(IsraeliQueue queue, Node item)
 {
     if (queue == NULL || queue->tail == NULL)
@@ -327,6 +342,7 @@ void IsraeliQueueRemoveNode(IsraeliQueue queue, Node item)
     }
 }
 
+// Determines if the given items are friends based on the IsraeliQueue's friendship functions
 bool isFriend(IsraeliQueue queue, void* item1, void* item2)
 {
     if (!queue)
@@ -345,6 +361,7 @@ bool isFriend(IsraeliQueue queue, void* item1, void* item2)
     return false;
 }
 
+// Determines if the given items are enemies based on the IsraeliQueue's friendship functions
 bool isEnemy(IsraeliQueue queue, void* item1, void* item2)
 {
     if (!queue || !*(queue->friendshipFunctions))
@@ -366,6 +383,7 @@ bool isEnemy(IsraeliQueue queue, void* item1, void* item2)
     return false;
 }
 
+// Finds the farthest enemy node before the specified friend node in the IsraeliQueue
 Node FindFarthestEnemyBeforeFriend(IsraeliQueue queue, Node toImprove, Node friend)
 {
     Node curr = toImprove->next;
@@ -383,6 +401,7 @@ Node FindFarthestEnemyBeforeFriend(IsraeliQueue queue, Node toImprove, Node frie
     return farthestEnemyBeforeFriend;
 }
 
+// Finds the farthest friend node before the specified enemy node in the IsraeliQueue
 Node FindFarthestFriendBeforeEnemy(IsraeliQueue queue, Node toImprove, Node enemy)
 {
     Node lastFriendBeforeEnemy = queue->tail;
@@ -399,6 +418,7 @@ Node FindFarthestFriendBeforeEnemy(IsraeliQueue queue, Node toImprove, Node enem
     return lastFriendBeforeEnemy;
 }
 
+// Determines if the enemy node appears before the friend node in the IsraeliQueue
 bool enemyIsBeforeFriend(Node enemy, Node friend)
 {
     Node curr = enemy;
@@ -411,6 +431,7 @@ bool enemyIsBeforeFriend(Node enemy, Node friend)
     return false;
 }
 
+// Improves the position of the specified node in the IsraeliQueue
 void improveNode(IsraeliQueue queue, Node toImprove)
 {
     if (toImprove->next == NULL)
@@ -438,6 +459,7 @@ void improveNode(IsraeliQueue queue, Node toImprove)
     }
 }
 
+// Improves the position of all nodes in the IsraeliQueue
 IsraeliQueueError IsraeliQueueImprovePositions(IsraeliQueue queue)
 {
     if (!queue)
@@ -465,6 +487,7 @@ IsraeliQueueError IsraeliQueueImprovePositions(IsraeliQueue queue)
     return ISRAELIQUEUE_SUCCESS;
 }
 
+// Returns the position of the specified item in the IsraeliQueue
 int getPosition(IsraeliQueue queue, void* item)
 {
     int size = IsraeliQueueSize(queue);
@@ -480,4 +503,3 @@ int getPosition(IsraeliQueue queue, void* item)
         position--;
     }
     return position;
-}
