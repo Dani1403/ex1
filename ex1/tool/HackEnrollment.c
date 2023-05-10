@@ -21,7 +21,7 @@ char* strdup(const char* str)
 {
     char* copy = malloc(strlen(str) + 1);
     if (copy != NULL) {
-         strcpy(copy, str);
+        strcpy(copy, str);
     }
     return copy;
 }
@@ -119,6 +119,7 @@ void addFriendshipWithHacker(Student* students, Hacker* hackers)
     }
 }
 
+//returns true if student 2 is in the friends array of student 1 and false otherwise
 bool checkFriendshipFromArray(Student student1, Student student2)
 {
     int student2Id = student2->id;
@@ -134,6 +135,7 @@ bool checkFriendshipFromArray(Student student1, Student student2)
     return false;
 }
 
+//returns true if student 2 is in the rivals array of student 1 and false otherwise
 bool checkRivalryFromArray(Student student1, Student student2)
 {
     int student2Id = student2->id;
@@ -149,6 +151,8 @@ bool checkRivalryFromArray(Student student1, Student student2)
     return false;
 }
 
+//returns the friendship_threshold if s1 and s2 are friends (hacker file) and the rivalry threshold if they are enemies
+//if they are neither, returns 0
 int friendOrRivalWithHacker(void* s1, void* s2)
 {
     Student student1 = (Student)s1;
@@ -164,6 +168,7 @@ int friendOrRivalWithHacker(void* s1, void* s2)
     return 0;
 }
 
+//compares two students with their id's
 int comparisonFunction(void* s1, void* s2)
 {
     Student student1 = (Student)s1;
@@ -274,7 +279,6 @@ Student* readStudentsFromFile(FILE* studentFile)
 }
 
 //Create Array of Hackers from file
-
 Hacker* readHackersFromFile(FILE* hackerFile)
 {
     int numOfHackers = 0;
@@ -282,300 +286,59 @@ Hacker* readHackersFromFile(FILE* hackerFile)
     char line[LINE_SIZE];
     while (fgets(line, sizeof(line), hackerFile))
     {
-        return -1;
-    }
-    int counter = 0;
-    char c;
-    while ((c = fgetc(file)) != EOF)
-    {
-        if (c == '\n')
+        int hackerId;
+        sscanf(line, "%d", &hackerId);
+        int numCourses = 0;
+        int* courseNumbers = NULL;
+        if (fgets(line, sizeof(line), hackerFile))
         {
-            counter++;
-        }
-    }
-    return counter;
-}
-
-
-//returns the first word of a line
-char* getWord(char* line)
-{
-    char* word = (char*)malloc(sizeof(char) * MAX_LINE_LENGTH);
-    if (!word)
-    {
-        return NULL;
-    }
-    int i = 0;
-    while (word[i] != ' ' && word[i] != '\0')
-    {
-        i++;
-    }
-    word[i] = '\0';
-    return word;
-}
-
-bool isEmpty(FILE* file)
-{
-    if (file == NULL)
-        return true;
-    long pos = ftell(file);
-    bool isEmpty = fgetc(file) == EOF;
-    fseek(file, pos, SEEK_SET);
-    return isEmpty;
-}
-
-char* readLine(FILE* file)
-{
-    if (!file)
-    {
-        return NULL;
-    }
-    long pos = ftell(file);
-    int counter = 0;
-    char c;
-    do
-    {
-        c = fgetc(file);
-        counter++;
-    } while (c != '\n' && c != EOF);
-
-    fseek(file, pos, SEEK_SET);
-    char* line = (char*)malloc(sizeof(char) * (counter + 1));
-    if (!line)
-    {
-        return NULL;
-    }
-    char* temp = fgets(line, counter + 1, file);
-    if (temp == NULL)
-    {
-        free(line);
-        return NULL;
-    }
-    line[counter - 1] = 0;
-    line[counter] = 0;
-    return line;
-}
-
-bool isDigit(char c)
-{
-    return c >= '0' && c <= '9';
-}
-
-bool isGoodId(const char* str)
-{
-    int i = 0;
-    while (isDigit(str[i]))
-    {
-        i++;
-    }
-    if (i != IDLEN)
-    {
-        return false;
-    }
-    return true;
-}
-
-int parseInt(char* str)
-{
-    int result = 0;
-    int i = 0;
-    while (isDigit(str[i]))
-    {
-        result = result * 10 + (str[i] - '0');
-        i++;
-    }
-    return result;
-}
-
-float parseFloat(char* str)
-{
-    float result = 0;
-    int i = 0;
-    while (isDigit(str[i]))
-    {
-        result = result * 10 + (float)(str[i] - '0');
-        i++;
-    }
-    if (str[i] == '.')
-    {
-        i++;
-        float factor = (float)0.1;
-        while (isDigit(str[i]))
-        {
-            result += (float)(str[i] - '0') * factor;
-            factor /= 10;
-            i++;
-        }
-    }
-    return result;
-}
-
-char* readString(char* str, int* i)
-{
-    int start = *i;
-    while (str[*i] != ' ' && str[*i] != '\n')
-    {
-        (*i)++;
-    }
-    char* result = malloc(*i - start + 1);
-    strncpy(result, &str[start], *i - start);
-    result[*i - start] = '\0';
-    return result;
-}
-
-Student* createStudentFromLine(char* line)
-{
-    Student student = (Student)malloc(sizeof(Student));
-
-    char* token = strtok(line, " ");
-    if (token != NULL)
-    {
-        student->id = strtol(token, NULL, 10);
-    }
-
-    token = strtok(NULL, " ");
-    if (token != NULL)
-    {
-        student->totalCredits = strtol(token, NULL, 10);
-    }
-
-    token = strtok(NULL, " ");
-    if (token != NULL)
-    {
-        student->gpa = strtof(token, NULL);
-    }
-
-    token = strtok(NULL, " ");
-    if (token != NULL)
-    {
-        student->firstName = strdup(token);
-    }
-
-    token = strtok(NULL, " ");
-    if (token != NULL)
-    {
-        student->lastName = strdup(token);
-    }
-
-    token = strtok(NULL, " ");
-    if (token != NULL)
-    {
-        student->city = strdup(token);
-    }
-
-    token = strtok(NULL, "\n");
-    if (token != NULL)
-    {
-        student->department = strdup(token);
-    }
-
-    return student;
-}
-
-Student* studentEnrollment(FILE* students, int linesInStudentFile)
-{
-    Student* arrayOfPtrStudent = malloc((linesInStudentFile) * sizeof(Student));
-    if (!arrayOfPtrStudent)
-    {
-        return NULL;
-    }
-    initArray((void**)arrayOfPtrStudent, linesInStudentFile);
-    int i = 0;
-    while (!isEmpty(students))
-    {
-        char* line = readLine(students);
-        arrayOfPtrStudent[i] = malloc(sizeof(Student));
-        initStudent(arrayOfPtrStudent[i]);
-        if (!arrayOfPtrStudent[i])
-        {
-            freeArray((void**)arrayOfPtrStudent, i);
-            return NULL;
-        }
-        arrayOfPtrStudent[i] = createStudentFromLine(line);
-        i++;
-    }
-    return arrayOfPtrStudent;
-}
-
-int* readIntArray(char* str, int* length)
-{
-    int start = 0;
-    int count = 0;
-    while (str[start] != '\n')
-    {
-        if (isDigit(str[start]))
-        {
-            count++;
-        }
-        start++;
-    }
-    int* result = malloc(count * sizeof(int));
-    int i = 0;
-    while (str[*length] != '\n')
-    {
-        if (isDigit(str[*length]))
-        {
-            result[i] = parseInt(str + *length);
-            i++;
-            while (isDigit(str[*length]))
+            char* token = strtok(line, " ");
+            while (token != NULL)
             {
-                (*length)++;
+                numCourses++;
+                courseNumbers = realloc(courseNumbers, numCourses * sizeof(int));
+                courseNumbers[numCourses - 1] = atoi(token);
+                token = strtok(NULL, " ");
             }
         }
-        (*length)++;
-    }
-    (*length)++;
-    return result;
-}
-
-Hacker* createHackerFromLine(char* line)
-{
-
-    int id = parseInt(line);
-    if (id < MINID || id > MAXID)
-    {
-        return NULL;
-    }
-
-    // Lire les autres champs
-    int i = IDLEN + 1; // index après l'ID et le '\n'
-    int* desiredCourses = readIntArray(line + i, &i);
-    int* friendsId = readIntArray(line + i, &i);
-    int* enemiesId = readIntArray(line + i, &i);
-
-    // Créer l'objet Hacker
-    Hacker hacker = malloc(sizeof(Hacker));
-    hacker->id = id;
-    hacker->courseNumbers = desiredCourses;
-    hacker->friendsIds = friendsId;
-    hacker->rivalsIds = enemiesId;
-
-    return hacker;
-}
-
-Hacker* hackerEnrollment(FILE* hackers, int numOfStudents)
-{
-    // Créer le tableau de pointeurs de Hacker
-    Hacker* hackerArray = malloc(numOfStudents * sizeof(Hacker));
-    int i = 0;
-
-    // Lire chaque ligne du fichier et créer un objet Hacker correspondant
-    char line[BUFFER];
-    while (fgets(line, BUFFER, hackers))
-    {
-        Hacker hacker = createHackerFromLine(line);
-        // est ce quon passe bien a l'autre
-        if (hacker != NULL)
+        int numRivals = 0;
+        int* rivalIds = NULL;
+        if (fgets(line, sizeof(line), hackerFile))
         {
-            hackerArray[i] = hacker;
-            i++;
+            char* token = strtok(line, " ");
+            while (token != NULL) {
+                numRivals++;
+                rivalIds = realloc(rivalIds, numRivals * sizeof(int));
+                rivalIds[numRivals - 1] = atoi(token);
+                token = strtok(NULL, " ");
+            }
         }
+        int numFriends = 0;
+        int* friendIds = NULL;
+        if (fgets(line, sizeof(line), hackerFile))
+        {
+            char* token = strtok(line, " ");
+            while (token != NULL)
+            {
+                numFriends++;
+                friendIds = realloc(friendIds, numFriends * sizeof(int));
+                friendIds[numFriends - 1] = atoi(token);
+                token = strtok(NULL, " ");
+            }
+        }
+        Hacker hacker = malloc(sizeof(Hacker));
+        hacker->id = hackerId;
+        hacker->courseNumbers = courseNumbers;
+        hacker->friendsIds = friendIds;
+        hacker->rivalsIds = rivalIds;
+        numOfHackers++;
+        hackerArray = realloc(hackerArray, numOfHackers * sizeof(Hacker));
+        hackerArray[numOfHackers - 1] = hacker;
     }
     return hackerArray;
 }
 
 //create Array of Courses from file
-
 Course* readCoursesFromFile(FILE* coursesFile)
 {
     int numOfCourses = 0;
@@ -595,47 +358,43 @@ Course* readCoursesFromFile(FILE* coursesFile)
     return courseArray;
 }
 
-////////////////////////////////createEnrollement///////////////////////////////////////
-
-EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers, FILE* queues)
+////////////////////////////////createEnrollement
+EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 {
-    if (students == NULL || courses == NULL || hackers == NULL || queues == NULL)
+    if (students == NULL || courses == NULL || hackers == NULL)
     {
         return NULL;
     }
-
-    EnrollmentSystem sys = malloc(sizeof(*sys));
-    if (!sys)
+    EnrollmentSystem system = malloc(sizeof(*system));
+    if (!system)
     {
         return NULL;
     }
     system->studentsArray = readStudentsFromFile(students);
     if (!system->studentsArray)
     {
-        freeStudentArray(sys->studentsArray);
-        free(sys);
+        free(system);
         return NULL;
     }
     system->coursesArray = readCoursesFromFile(courses);
     if (!system->coursesArray)
     {
-        freeStudentArray(sys->studentsArray);
-        freeCourseArray(sys->coursesArray);
-        free(sys);
+        freeStudentArray(system->studentsArray);
+        free(system);
         return NULL;
     }
     system->hackersArray = readHackersFromFile(hackers);
     if (!system->hackersArray)
     {
-        freeEnrollmentSystem(sys);
+        freeStudentArray(system->studentsArray);
+        freeCourseArray(system->coursesArray);
+        free(system);
         return NULL;
     }
-
-    return sys;
+    return system;
 }
 
-
-/////////////////////////////////////////readEnrollment////////////////////////////////////////////////////////
+///////////////////////readEnrollment
 Queue* readQueuesFromFile(FILE* queuesFile)
 {
     int numQueues = 0;
@@ -679,8 +438,7 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
     return sys;
 }
 
-//////////hack enrollment
-
+//returns the queue with the corresponding course number
 Queue findQueueCorresponding(Queue* queuesArray, int course)
 {
     if (queuesArray == NULL || course < 0)
@@ -698,6 +456,7 @@ Queue findQueueCorresponding(Queue* queuesArray, int course)
     return NULL;
 }
 
+//returns the student with the given id
 Student findStudentFromId(Student* studentArray, int id) {
     if (id == 0 || studentArray == NULL) {
         return NULL;
@@ -711,6 +470,8 @@ Student findStudentFromId(Student* studentArray, int id) {
     }
     return NULL;
 }
+
+//returns the course with the given course number
 Course findCourseCorresponding(Course* coursesArray, int courseNum)
 {
     if (coursesArray == NULL || courseNum < 0)
@@ -775,6 +536,7 @@ IsraeliQueue enqueueHackersInIsraeliQueue(IsraeliQueue israeliQueue, Course cour
     return israeliQueue;
 }
 
+//update the queue from the israeliQueue corresponding
 Queue updateFromIsraeli(IsraeliQueue israeliQueue, Queue queue)
 {
     int size = IsraeliQueueSize(israeliQueue);
@@ -788,6 +550,7 @@ Queue updateFromIsraeli(IsraeliQueue israeliQueue, Queue queue)
     return queue;
 }
 
+//returns the hacker position in the queue
 int getHackerPosition(Hacker hacker, Queue queue)
 {
     int hackerId = hacker->id;
@@ -802,6 +565,7 @@ int getHackerPosition(Hacker hacker, Queue queue)
     return getSizeOfArray(queue->studentsIds);
 }
 
+//print all the queues in an array of Queues to the output file
 void printQueuesInFile(Queue* queuesArray, FILE* out)
 {
     int queue = 0;
@@ -818,6 +582,15 @@ void printQueuesInFile(Queue* queuesArray, FILE* out)
     }
 }
 
+//////////hack enrollment
+/*
+* First, update the students fields
+* For each course, create a new IsraeliQueue and enqueus the students and the hackers
+* update the original queue with the israeli queue
+* For each hacker, get his position in each course that he wanted
+* compares the position with the size of the course, if the hacker is not in it break
+* if all went good, print the results in out file
+*/
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
 {
     Hacker* hackersArray = sys->hackersArray;
@@ -851,7 +624,7 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
             if (getHackerPosition(hackersArray[hacker], queue) > course->size)
             {
                 coursesNotReceived++;
-                if (coursesNotReceived == getSizeOfArray(hackersArray[hacker]->courseNumbers))
+                if (coursesNotReceived == 2)
                 {
                     fprintf(out, "Cannot satisfy constraints for %d", hackersArray[hacker]->id);
                     flag = false;
