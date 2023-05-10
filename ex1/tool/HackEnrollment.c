@@ -170,7 +170,7 @@ void freeHackerArray(Hacker* hackerArr)
 void freeStudentArray(Student* studentArr)
 {
     int student = 0;
-    while (student < studentArr[student])
+    while (studentArr[student])
     {
         free(studentArr[student]->firstName);
         free(studentArr[student]->lastName);
@@ -628,10 +628,11 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
 Queue createQueueFromLine(char* line)
 {
     int i = 0;
-    Queue queue = malloc(sizeof(*queue));
+    Queue queue = (Queue)malloc(sizeof(*queue));
     queue->courseNumber = parseInt(line + i);
     i++;
     queue->studentsIds = readIntArray(line + i, &i);
+    return queue;
 }
 
 EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
@@ -684,6 +685,7 @@ Student findStudentFromId(Student* studentArray, int id) {
         }
         student++;
     }
+    return NULL;
 }
 
 Course findCourseCorresponding(Course* coursesArray, int courseNum)
@@ -802,7 +804,7 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
     int course = 0;
     while (coursesArray[course])
     {
-        Queue queue = findQueueCorresponding(queuesArray, coursesArray[course]->courseNumber);
+        Queue queue = findQueueCorresponding(queuesArray, coursesArray[course]->courseNumber);///
         IsraeliQueue newQueue = IsraeliQueueCreate(NULL, comparisonFunction, FRIENDSHIP_THRESHOLD, RIVALRY_THRESHOLD);
         IsraeliQueueAddFriendshipMeasure(newQueue, &nameDistance);
         IsraeliQueueAddFriendshipMeasure(newQueue, &idDistance);
@@ -822,7 +824,7 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
         {
             Course course = findCourseCorresponding(coursesArray, hackersArray[hacker]->courseNumbers[courseNum]);
             Queue queue = findQueueCorresponding(queuesArray, course->courseNumber);
-            if (getHackerPosition(hacker, queue) > course->size)
+            if (getHackerPosition(hackersArray[hacker], queue) > course->size)
             {
                 coursesNotReceived++;
                 if (coursesNotReceived == getSizeOfArray(hackersArray[hacker]->courseNumbers))
