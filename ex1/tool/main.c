@@ -18,6 +18,7 @@ void hackEnrollmentProgram(char* students, char* courses, char* hackers, char* q
 	fclose(hackersFile);
 	fclose(queuesFile);
 	fclose(outFile);
+	freeEnrollmentSystem(sys);
 }	
 
 int main(int argc, char** argv)

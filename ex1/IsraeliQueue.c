@@ -203,10 +203,9 @@ IsraeliQueue IsraeliQueueMerge(IsraeliQueue* qarr, ComparisonFunction compare_fu
 {
     if (qarr == NULL)
     {
-        return NULL; // Return NULL if qarr is NULL
+        return NULL; 
     }
     int num_queues = 0;
-    // Calculate the number of queues in qarr
     int merged_friendship_threshold_sum = 0;
     int merged_rivalry_threshold_sum = 0;
     for (; qarr[num_queues] != NULL; num_queues++)
@@ -214,15 +213,12 @@ IsraeliQueue IsraeliQueueMerge(IsraeliQueue* qarr, ComparisonFunction compare_fu
         merged_friendship_threshold_sum += qarr[num_queues]->friendshipThreshold;
         merged_rivalry_threshold_sum += abs(qarr[num_queues]->rivalryThreshold);
     }
-    // Return NULL if there are no queues in qarr
     if (num_queues == 0) return NULL;
-    // Calculate the "membership dimensions" of the merged queues
     int merged_friendship_threshold = merged_friendship_threshold_sum / num_queues;
     int merged_rivalry_threshold = merged_rivalry_threshold_sum / num_queues;
     if (merged_rivalry_threshold_sum % num_queues != 0) {
-        merged_rivalry_threshold++; // Round up if necessary
+        merged_rivalry_threshold++; 
     }
-    // Create a new merged array of frienshipFunction
     int newNumberOfFriendshipFunc = 0;
     for (int i = 0, j = 0; i < num_queues; i++)
     {
@@ -248,9 +244,8 @@ IsraeliQueue IsraeliQueueMerge(IsraeliQueue* qarr, ComparisonFunction compare_fu
     IsraeliQueue merged_queue = IsraeliQueueCreate(newTab, compare_function, merged_friendship_threshold, merged_rivalry_threshold);
     if (merged_queue == NULL)
     {
-        return NULL; // Return NULL if failed to create new queue
+        return NULL; 
     }
-    // Enqueue items from each queue in round-robin order
     bool all_queues_empty = false;
     while (!all_queues_empty)
     {
@@ -269,27 +264,6 @@ IsraeliQueue IsraeliQueueMerge(IsraeliQueue* qarr, ComparisonFunction compare_fu
         }
     }
     return merged_queue;
-}
-
-// Adds an item to the tail of the IsraeliQueue and improves the node's position if necessary
-IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item)
-{
-    if (queue == NULL || item == NULL)
-    {
-        return ISRAELIQUEUE_BAD_PARAM;
-    }
-    Node newNode = (Node)malloc(sizeof(*newNode));
-    if (newNode == NULL)
-    {
-        return ISRAELIQUEUE_ALLOC_FAILED;
-    }
-    newNode->item = item;
-    newNode->friendCount = 0;
-    newNode->rivalCount = 0;
-    newNode->next = queue->tail;
-    queue->tail = newNode;
-    improveNode(queue, newNode);
-    return ISRAELIQUEUE_SUCCESS;
 }
 
 // Inserts the given node after the specified friend node in the IsraeliQueue
@@ -459,6 +433,27 @@ void improveNode(IsraeliQueue queue, Node toImprove)
     }
 }
 
+// Adds an item to the tail of the IsraeliQueue and improves the node's position if necessary
+IsraeliQueueError IsraeliQueueEnqueue(IsraeliQueue queue, void* item)
+{
+    if (queue == NULL || item == NULL)
+    {
+        return ISRAELIQUEUE_BAD_PARAM;
+    }
+    Node newNode = (Node)malloc(sizeof(*newNode));
+    if (newNode == NULL)
+    {
+        return ISRAELIQUEUE_ALLOC_FAILED;
+    }
+    newNode->item = item;
+    newNode->friendCount = 0;
+    newNode->rivalCount = 0;
+    newNode->next = queue->tail;
+    queue->tail = newNode;
+    improveNode(queue, newNode);
+    return ISRAELIQUEUE_SUCCESS;
+}
+
 // Improves the position of all nodes in the IsraeliQueue
 IsraeliQueueError IsraeliQueueImprovePositions(IsraeliQueue queue)
 {
@@ -503,3 +498,4 @@ int getPosition(IsraeliQueue queue, void* item)
         position--;
     }
     return position;
+}
