@@ -791,7 +791,7 @@ void printQueuesInFile(Queue* queuesArray, FILE* out)
             fprintf(out, "%d", queuesArray[queue]->studentsIds[position]);
             position++;
         }
-        fputc('/n', out);
+        fputc('\n', out);
     }
 }
 
