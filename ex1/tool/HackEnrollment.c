@@ -638,6 +638,19 @@ Queue findQueueCorresponding(Queue* queuesArray, int course)
     return NULL;
 }
 
+Student findStudentFromId(Student* studentArray, int id) {
+    if (id == 0 || studentArray == NULL) {
+        return NULL;
+    }
+    int student = 0;
+    while (studentArray[student]) {
+        if ((studentArray[student]->id) == id) {
+            return studentArray[student];
+        }
+        student++;
+    }
+}
+
 Course findCourseCorresponding(Course* coursesArray, int courseNum)
 {
     int i = 0;
@@ -657,18 +670,11 @@ IsraeliQueue enqueueStudentsInIsraeliQueue(IsraeliQueue israeliQueue, Student* s
     int id = 0;
     while (queue->studentsIds[id])
     {
-        int student = 0;
-        while (studentArr[student])
+        Student studentToEnqueue = findStudentFromId(studentArr, queue->studentsIds[id]);
+        IsraeliQueueError enqueue = IsraeliQueueEnqueue(israeliQueue, studentToEnqueue);
+        if (enqueue != ISRAELIQUEUE_SUCCESS)
         {
-            if (studentArr[student]->id == queue->studentsIds[id])
-            {
-                IsraeliQueueError err = IsraeliQueueEnqueue(israeliQueue, studentArr[student]);
-                if (err != ISRAELIQUEUE_SUCCESS)
-                {
-                    return NULL;
-                }
-            }
-            student++;
+            return NULL;
         }
         id++;
     }
@@ -687,21 +693,15 @@ IsraeliQueue enqueueHackersInIsraeliQueue(IsraeliQueue israeliQueue, Course cour
         {
             if (courseNumber == hackerArray[hacker]->courseNumbers[askedCourse])
             {
-                int student = 0;
-                while (studentArray[student])
+                Student hackerToEnqueue = findStudentFromId(studentArray, (hackerArray[hacker])->id);
+                if (IsraeliQueueContains(israeliQueue, hackerToEnqueue))
                 {
-                    if (studentArray[student]->id == hackerArray[hacker]->id)
-                    {
-                        if (IsraeliQueueContains(studentArray[student])) {
-                            break;
-                        }
-                        IsraeliQueueError err = IsraeliQueueEnqueue(israeliQueue, studentArray[student]);
-                        if (err != ISRAELIQUEUE_SUCCESS)
-                        {
-                            return NULL;
-                        }
-                    }
-                    student++;
+                    break;
+                }
+                IsraeliQueueError enqueue = IsraeliQueueEnqueue(israeliQueue, hackerToEnqueue);
+                if (enqueue != ISRAELIQUEUE_SUCCESS)
+                {
+                    return NULL;
                 }
             }
             askedCourse++;
