@@ -148,7 +148,50 @@ int comparisonFunction(Student student1, Student student2)
     return student1->id - student2->id;
 }
 
-////////////////////////// Create Enrollment //////////////////////////
+///////Free functions
+void freeArray(void** arr, int currIndex)
+{
+    while (currIndex >= 0)
+    {
+        free(arr[currIndex]);
+        currIndex--;
+    }
+    free(arr);
+}
+
+
+void freeHackerArray(Hacker* hackerArr, int numOfHackers)
+{
+    int hacker = 0;
+    while (hacker < numOfHackers)
+    {
+        free(hackerArr[hacker]->courseNumbers);
+        free(hackerArr[hacker]->friendsIds);
+        free(hackerArr[hacker]->rivalsIds);
+        free(hackerArr[hacker]);
+    }
+    free(hackerArr);
+}
+
+void deleteStudentArray(Student* studentArr, int numOfStudent)
+{
+    int student = 0;
+    while (student < numOfStudent)
+    {
+        free(studentArr[student]->firstName);
+        free(studentArr[student]->lastName);
+        free(studentArr[student]->city);
+        free(studentArr[student]->department);
+        free(studentArr[student]->hackerFriends);
+        free(studentArr[student]->hackerRivals);
+        free(studentArr[student]);
+        student++;
+    }
+    free(studentArr);
+}
+
+
+////////////////////////// Create Enrollment 
 IsraeliQueue enqueueHackersInIsraeliQueue(IsraeliQueue israeliQueue, Course course, Hacker* hackerArray, Student* studentArray);
 IsraeliQueue enqueueStudentsInIsraeliQueue(IsraeliQueue israeliQueue, Student* studentArr, Queue queue);
 
@@ -170,25 +213,15 @@ void initStudent(Student s)
     s->department = 0;
 }
 
-void freeArray(void** arr, int currIndex)
+int nbOfLinesInFile(FILE* file)
 {
-    while (currIndex >= 0)
-    {
-        free(arr[currIndex]);
-        currIndex--;
-    }
-    free(arr);
-}
-
-int nbOfLinesInFile(FILE* f)
-{
-    if (!f)
+    if (!file)
     {
         return -1;
     }
     int counter = 0;
     char c;
-    while ((c = fgetc(f)) != EOF)
+    while ((c = fgetc(file)) != EOF)
     {
         if (c == '\n')
         {
@@ -198,43 +231,8 @@ int nbOfLinesInFile(FILE* f)
     return counter;
 }
 
-void destroyHacker(void* hacker)
-{
-    if (hacker == NULL)
-    {
-        return;
-    }
-    // destroy lists of friend et enemy
-    free(hacker);
-}
 
-void destroyStudent(Student student)
-{
-    if (student == NULL)
-    {
-        return;
-    }
-    free(student->hackerFriends);
-    free(student->hackerRivals);
-    free(student);
-}
-
-void deleteStudentArray(Student* studentArr, int index)
-{
-    int i = 0;
-    while (i < index)
-    {
-        free(studentArr[i]->firstName);
-        free(studentArr[i]->lastName);
-        free(studentArr[i]->city);
-        free(studentArr[i]->department);
-        free(studentArr[i]);
-        i++;
-    }
-    free(studentArr);
-}
-
-// reads a string and returns the first word before a space or the end of the string
+//returns the first word of a line
 char* getWord(char* line)
 {
     char* word = (char*)malloc(sizeof(char) * MAX_LINE_LENGTH);
@@ -625,8 +623,14 @@ EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
     return sys;
 }
 
+//////////Hack Enrollment////////////
+
 Queue findQueueCorresponding(Queue* queuesArray, int course)
 {
+    if (queuesArray == NULL || course < 0)
+    {
+        return NULL;
+    }
     int i = 0;
     while (queuesArray[i])
     {
@@ -653,6 +657,10 @@ Student findStudentFromId(Student* studentArray, int id) {
 
 Course findCourseCorresponding(Course* coursesArray, int courseNum)
 {
+    if (coursesArray == NULL || courseNum < 0)
+    {
+        return NULL;
+    }
     int i = 0;
     while (coursesArray[i])
     {
