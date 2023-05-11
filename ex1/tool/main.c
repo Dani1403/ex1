@@ -5,36 +5,26 @@
 
 void hackEnrollmentProgram(char* students, char* courses, char* hackers, char* queues, char* out)
 {
-	/*
+	
 	FILE* studentsFile = fopen(students, "r");
 	FILE* coursesFile = fopen(courses, "r");
 	FILE* hackersFile = fopen(hackers, "r");
 	FILE* queuesFile = fopen(queues, "r");
 	FILE* outFile = fopen(out, "w");
-	*/
-	FILE* studentsFile = fopen("C:/Users/danis/source/repos/ex1/ex1/ex1/ExampleTest/students.txt", "r");
-	FILE* coursesFile = fopen("C:/Users/danis/source/repos/ex1/ex1/ex1/ExampleTest/courses.txt", "r");
-	FILE* hackersFile = fopen("C:/Users/danis/source/repos/ex1/ex1/ex1/ExampleTest/hackers.txt", "r");
-	FILE* queuesFile = fopen("C:/Users/danis/source/repos/ex1/ex1/ex1/ExampleTest/queues.txt", "r");
-	FILE* outFile = fopen("C:/Users/danis/source/repos/ex1/ex1/ex1/ExampleTest/out.txt", "w");
-
+	
 	if (!studentsFile || !coursesFile || !hackersFile || !queuesFile)
 	{
-		printf("failed to open files\n");
+		return;
 	}
 
 	EnrollmentSystem sys = createEnrollment(studentsFile, coursesFile, hackersFile);
-	printf("created enrollment\n");
 	sys = readEnrollment(sys, queuesFile);
-	printf("read enrollment\n");
 	hackEnrollment(sys, outFile);
-	printf("hacked enrollment\n");
 	fclose(studentsFile);
 	fclose(coursesFile);
 	fclose(hackersFile);
 	fclose(queuesFile);
 	fclose(outFile);
-	printf("closed files\n");
 	freeEnrollmentSystem(sys);
 }	
 

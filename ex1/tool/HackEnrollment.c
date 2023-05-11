@@ -33,8 +33,13 @@ int absolute(int num)
 
 int getSizeOfArray(void* array, size_t elemSize)
 {
-    size_t size = sizeof(array);
-    int count = size / elemSize;
+    int count = 0;
+    char* ptr = (char*)array;
+    while (ptr != NULL && *ptr != '\0')
+    {
+        count++;
+        ptr += elemSize;
+    }
     return count;
 }
 
@@ -71,6 +76,10 @@ int idDistance(void* s1, void* s2)
 // update the fields of the students if they are friends with a hacker
 void addFriendshipWithHacker(Student* students, Hacker* hackers)
 {
+    if (!students || !hackers)
+    {
+        return;
+    }
     int numOfStudents = getSizeOfArray(students, sizeof(Student));
     int numOfHackers = getSizeOfArray(hackers, sizeof(Hacker));
     for (int student = 0; student < numOfStudents; student++)
@@ -172,6 +181,10 @@ int comparisonFunction(void* s1, void* s2)
 
 void freeHackerArray(Hacker* hackerArr)
 {
+    if (!hackerArr)
+    {
+        return;
+    }
     int numOfHackers = getSizeOfArray(hackerArr, sizeof(Hacker));
     for (int hacker = 0; hacker < numOfHackers; hacker++)
     {
@@ -185,6 +198,10 @@ void freeHackerArray(Hacker* hackerArr)
 
 void freeStudentArray(Student* studentArr)
 {
+    if (!studentArr)
+    {
+        return;
+    }
     int numOfStudents = getSizeOfArray(studentArr, sizeof(Student));
     for (int student = 0; student < numOfStudents; student++)
     {
@@ -202,6 +219,10 @@ void freeStudentArray(Student* studentArr)
 
 void freeCourseArray(Course* courseArr)
 {
+    if (!courseArr)
+    {
+        return NULL;
+    }
     int numOfCourses = getSizeOfArray(courseArr, sizeof(Course));
     for (int course = 0; course < numOfCourses; course++)
     {
@@ -212,6 +233,10 @@ void freeCourseArray(Course* courseArr)
 
 void freeQueueArray(Queue* queueArr)
 {
+    if (!queueArr)
+    {
+        return NULL;
+    }
     int numOfQueues = getSizeOfArray(queueArr, sizeof(Queue));
     for (int queue = 0; queue < numOfQueues; queue++)
     {
@@ -223,6 +248,10 @@ void freeQueueArray(Queue* queueArr)
 
 void freeEnrollmentSystem(EnrollmentSystem sys)
 {
+    if (!sys)
+    {
+        return NULL;
+    }
     freeStudentArray(sys->studentsArray);
     freeHackerArray(sys->hackersArray);
     freeCourseArray(sys->coursesArray);
@@ -232,6 +261,10 @@ void freeEnrollmentSystem(EnrollmentSystem sys)
 
 void freeArray(void** array, int currentIndex)
 {
+    if (!array)
+    {
+        return;
+    }
     while (currentIndex >= 0)
     {
         free(array[currentIndex]);
@@ -245,6 +278,10 @@ void freeArray(void** array, int currentIndex)
 //Create Array of Students from file
 Student* readStudentsFromFile(FILE* studentFile)
 {
+    if (!studentFile)
+    {
+        return NULL;
+    }
     int numOfStudents = 0;
     Student* studentArray = NULL;
     char line[LINE_SIZE];
@@ -254,18 +291,42 @@ Student* readStudentsFromFile(FILE* studentFile)
         int id, totalCredits, gpa;
         sscanf(line, "%d %d %d %255s %255s %255s %255s", &id, &totalCredits, &gpa, firstName, lastName, city, department);
         Student student = (Student)malloc(sizeof(Student));
-        student->firstName = strdup(firstName);
-        student->lastName = strdup(lastName);
+        char* temp = strdup(firstName);
+        if (temp)
+        {
+            student->firstName = temp;
+            
+        }
+        temp = strdup(lastName);
+        if (temp)
+        {
+            student->firstName = temp;
+
+        }
         student->id = id;
         student->totalCredits = totalCredits;
         student->gpa = gpa;
-        student->city = strdup(city);
-        student->department = strdup(department);
+        temp = strdup(city);
+        if (temp)
+        {
+            student->firstName = temp;
+
+        }
+        temp = strdup(department);
+        if (temp)
+        {
+            student->firstName = temp;
+
+        }
         student->hackerFriends = NULL;
         student->hackerRivals = NULL;
         numOfStudents++;
         studentArray = realloc(studentArray, numOfStudents * sizeof(Student));
         studentArray[numOfStudents - 1] = student;
+        if (temp)
+        {
+            free(temp);
+        }
     }
     return studentArray;
 }
@@ -273,6 +334,10 @@ Student* readStudentsFromFile(FILE* studentFile)
 //Create Array of Hackers from file
 Hacker* readHackersFromFile(FILE* hackerFile)
 {
+    if (!hackerFile)
+    {
+        return NULL;
+    }
     int numOfHackers = 0;
     Hacker* hackerArray = NULL;
     char line[LINE_SIZE];
@@ -333,6 +398,10 @@ Hacker* readHackersFromFile(FILE* hackerFile)
 //create Array of Courses from file
 Course* readCoursesFromFile(FILE* coursesFile)
 {
+    if (!coursesFile)
+    {
+        return NULL;
+    }
     int numOfCourses = 0;
     Course* courseArray = NULL;
     char line[LINE_SIZE];
@@ -357,38 +426,42 @@ EnrollmentSystem createEnrollment(FILE* students, FILE* courses, FILE* hackers)
     {
         return NULL;
     }
-    EnrollmentSystem system = malloc(sizeof(*system));
-    if (!system)
+    EnrollmentSystem sys = malloc(sizeof(*sys));
+    if (!sys)
     {
         return NULL;
     }
-    system->studentsArray = readStudentsFromFile(students);
-    if (!system->studentsArray)
+    sys->studentsArray = readStudentsFromFile(students);
+    if (!sys->studentsArray)
     {
+        free(sys);
+        return NULL;
+    }
+    sys->coursesArray = readCoursesFromFile(courses);
+    if (!sys->coursesArray)
+    {
+        freeStudentArray(sys->studentsArray);
         free(system);
         return NULL;
     }
-    system->coursesArray = readCoursesFromFile(courses);
-    if (!system->coursesArray)
+    sys->hackersArray = readHackersFromFile(hackers);
+    if (!sys->hackersArray)
     {
-        freeStudentArray(system->studentsArray);
-        free(system);
+        freeStudentArray(sys->studentsArray);
+        freeCourseArray(sys->coursesArray);
+        free(sys);
         return NULL;
     }
-    system->hackersArray = readHackersFromFile(hackers);
-    if (!system->hackersArray)
-    {
-        freeStudentArray(system->studentsArray);
-        freeCourseArray(system->coursesArray);
-        free(system);
-        return NULL;
-    }
-    return system;
+    return sys;
 }
 
 ///////////////////////readEnrollment
 Queue* readQueuesFromFile(FILE* queuesFile)
 {
+    if (!queuesFile)
+    {
+        return NULL;
+    }
     int numQueues = 0;
     Queue* queues = NULL;
     char line[LINE_SIZE];
@@ -425,6 +498,10 @@ Queue* readQueuesFromFile(FILE* queuesFile)
 
 EnrollmentSystem readEnrollment(EnrollmentSystem sys, FILE* queues)
 {
+    if (!sys || !queues)
+    {
+        return NULL;
+    }
     Queue* queueArray = readQueuesFromFile(queues);
     sys->queuesArray = queueArray;
     return sys;
@@ -484,6 +561,10 @@ Course findCourseCorresponding(Course* coursesArray, int courseNum)
 // Find the student that are in the actual queue and enqueues them in the new israeliQueue
 IsraeliQueue enqueueStudentsInIsraeliQueue(IsraeliQueue israeliQueue, Student* studentArr, Queue queue)
 {
+    if (!israeliQueue || !studentArr || !queue)
+    {
+        return NULL;
+    }
     int numOfStudentsIds = getSizeOfArray(queue->studentsIds, sizeof(int));
     for (int id = 0; id < numOfStudentsIds; id++)
     {
@@ -500,6 +581,10 @@ IsraeliQueue enqueueStudentsInIsraeliQueue(IsraeliQueue israeliQueue, Student* s
 // find the hackers that want the course and enqueues them in the israeliqueue corresponding to the course
 IsraeliQueue enqueueHackersInIsraeliQueue(IsraeliQueue israeliQueue, Course course, Hacker* hackerArray, Student* studentArray)
 {
+    if (!israeliQueue || !course || !hackerArray || !studentArray)
+    {
+        return NULL;
+    }
     int courseNumber = course->courseNumber;
     int numOfHackers = getSizeOfArray(hackerArray, sizeof(Hacker));
     for (int hacker = 0; hacker < numOfHackers; hacker++)
@@ -528,6 +613,10 @@ IsraeliQueue enqueueHackersInIsraeliQueue(IsraeliQueue israeliQueue, Course cour
 //update the queue from the israeliQueue corresponding
 Queue updateFromIsraeli(IsraeliQueue israeliQueue, Queue queue)
 {
+    if (!israeliQueue || !queue)
+    {
+        return NULL;
+    }
     int size = IsraeliQueueSize(israeliQueue);
     int* newStudentsIds = malloc(sizeof(int) * size);
     for (int student = 0; student < size; student++)
@@ -542,6 +631,10 @@ Queue updateFromIsraeli(IsraeliQueue israeliQueue, Queue queue)
 //returns the hacker position in the queue
 int getHackerPosition(Hacker hacker, Queue queue)
 {
+    if (!hacker || !queue)
+    {
+        return NULL;
+    }
     int hackerId = hacker->id;
     int maxPosition = getSizeOfArray(queue->studentsIds, sizeof(int));
     for (int position = 0; position < maxPosition; position++)
@@ -557,6 +650,10 @@ int getHackerPosition(Hacker hacker, Queue queue)
 //print all the queues in an array of Queues to the output file
 void printQueuesInFile(Queue* queuesArray, FILE* out)
 {
+    if (!queuesArray || !out)
+    {
+        return;
+    }
     int queue = 0;
     int numOfQueues = getSizeOfArray(queuesArray, sizeof(Queue));
     for (int queue = 0; queue < numOfQueues; queue++)
@@ -582,23 +679,66 @@ void printQueuesInFile(Queue* queuesArray, FILE* out)
 */
 void hackEnrollment(EnrollmentSystem sys, FILE* out)
 {
+    if (!sys || !out)
+    {
+        return NULL;
+    }
     Hacker* hackersArray = sys->hackersArray;
+    if (!hackersArray)
+    {
+        return;
+    }
     Course* coursesArray = sys->coursesArray;
+    if (!coursesArray)
+    {
+        return;
+    }
     Queue* queuesArray = sys->queuesArray;
+    if (!queuesArray)
+    {
+        return;
+    }
     Student* studentsArray = sys->studentsArray;
+    if (!studentsArray)
+    {
+        return;
+    }
     addFriendshipWithHacker(studentsArray, hackersArray);
     int numOfCourses = getSizeOfArray(coursesArray, sizeof(Course));
     for (int course = 0; course < numOfCourses; course++)
     {
-        printf("course num, %d\n", course);
         Queue queue = findQueueCorresponding(queuesArray, coursesArray[course]->courseNumber);
         IsraeliQueue newQueue = IsraeliQueueCreate(NULL, comparisonFunction, FRIENDSHIP_THRESHOLD, RIVALRY_THRESHOLD);
-        IsraeliQueueAddFriendshipMeasure(newQueue, &nameDistance);
-        IsraeliQueueAddFriendshipMeasure(newQueue, &idDistance);
-        IsraeliQueueAddFriendshipMeasure(newQueue, &friendOrRivalWithHacker);
+        IsraeliQueueError result = IsraeliQueueAddFriendshipMeasure(newQueue, &nameDistance);
+        if (result != ISRAELIQUEUE_SUCCESS)
+        {
+            return;
+        }
+        result = IsraeliQueueAddFriendshipMeasure(newQueue, &idDistance);
+        if (result != ISRAELIQUEUE_SUCCESS)
+        {
+            return;
+        }
+        result = IsraeliQueueAddFriendshipMeasure(newQueue, &friendOrRivalWithHacker);
+        if (result != ISRAELIQUEUE_SUCCESS)
+        {
+            return;
+        }
         newQueue = enqueueStudentsInIsraeliQueue(newQueue, studentsArray, queue);
+        if (!newQueue)
+        {
+            return;
+        }
         newQueue = enqueueHackersInIsraeliQueue(newQueue, coursesArray[course], hackersArray, studentsArray);
+        if (!newQueue)
+        {
+            return;
+        }
         queue = updateFromIsraeli(newQueue, queue);
+        if (!queue)
+        {
+            return;
+        }
         IsraeliQueueDestroy(newQueue);
     }
     bool flag = true;
@@ -610,7 +750,15 @@ void hackEnrollment(EnrollmentSystem sys, FILE* out)
         for (int courseNum = 0; courseNum < numOfCoursesDemanded; courseNum++)
         {
             Course course = findCourseCorresponding(coursesArray, hackersArray[hacker]->courseNumbers[courseNum]);
+            if (!course)
+            {
+                return;
+            }
             Queue queue = findQueueCorresponding(queuesArray, course->courseNumber);
+            if (!queue)
+            {
+                return;
+            }
             if (getHackerPosition(hackersArray[hacker], queue) > course->size)
             {
                 coursesNotReceived++;
